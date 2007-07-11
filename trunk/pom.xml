@@ -3,7 +3,7 @@
 	<groupId>lius</groupId>
 	<artifactId>lius4compass</artifactId>
 	<name>lius4compass</name>
-	<version>1.0.1</version>
+	<version>1.0.2-SNAPSHOT</version>
 	<description>lius4compass</description>
 	<url>http://www.bibl.ulaval.ca/lius/index.en.html</url>
 	<inceptionYear>2004</inceptionYear>
@@ -23,9 +23,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:svn:http://lius4compass.googlecode.com/svn/tags/lius4compass-1.0.1</connection>
-		<developerConnection>scm:svn:https://lius4compass.googlecode.com/svn/tags/lius4compass-1.0.1</developerConnection>
-		<url>http://lius4compass.googlecode.com/svn/tags/lius4compass-1.0.1</url>
+		<connection>scm:svn:http://lius4compass.googlecode.com/svn/trunk/</connection>
+		<developerConnection>scm:svn:https://lius4compass.googlecode.com/svn/trunk/</developerConnection>
+		<url>http://lius4compass.googlecode.com/svn/trunk/</url>
 	</scm>
 	<issueManagement>
 		<system>GoogleCode</system>
