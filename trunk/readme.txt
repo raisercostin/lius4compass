@@ -1,0 +1,1 @@
+Before execute mvn to work with the project you should run mvnconfig.bat or mvnconfig.sh, to configure the repository with some jars that are hard to find in public repositories.
