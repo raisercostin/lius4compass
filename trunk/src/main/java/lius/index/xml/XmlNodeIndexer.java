@@ -25,7 +25,7 @@ import java.util.List;
 import java.util.Set;
 
 import lius.config.LiusField;
-import lius.index.Indexer;
+import lius.index.BaseIndexer;
 import lius.util.LiusUtils;
 
 import org.apache.log4j.Logger;
@@ -42,7 +42,7 @@ import org.jdom.xpath.XPath;
  * 
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
-public class XmlNodeIndexer extends Indexer {
+public class XmlNodeIndexer extends BaseIndexer {
     static Logger logger = Logger.getLogger(XmlNodeIndexer.class);
     private XmlFileIndexer xfi = new XmlFileIndexer();
 
@@ -171,7 +171,7 @@ public class XmlNodeIndexer extends Indexer {
 
     @Override
     public String getContent() {
-        Indexer indexer = xfi;
+        BaseIndexer indexer = xfi;
         indexer.setStreamToIndex(getStreamToIndex());
         return indexer.getContent();
     }
