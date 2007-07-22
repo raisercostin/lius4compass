@@ -17,9 +17,15 @@ package lius.index;
  * limitations under the License.
  */
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.List;
+
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 
 import de.sty.io.mimetype.MimeType;
 import de.sty.io.mimetype.MimeTypeResolver;
@@ -50,5 +56,20 @@ public class MimeTypeUtils {
         }
         MimeType mime = (MimeType) ls.get(0);
         return mime.getName();
+    }
+
+    public static String getMimeType(Resource resource) {
+        try {
+            if (resource instanceof FileSystemResource)
+                return getMimeType(resource.getFile());
+            else if (resource instanceof UrlResource)
+                return getMimeType(resource.getURL());
+            else if (resource instanceof ClassPathResource)
+                return getMimeType(resource.getFile());
+            else
+                return getMimeType(resource.getInputStream());
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }

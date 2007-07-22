@@ -1,27 +1,14 @@
 package lius.index;
 
-import java.io.InputStream;
 
 import lius.config.LiusConfig;
 
 import org.apache.lucene.document.Document;
+import org.springframework.core.io.Resource;
 
 public interface IndexService extends Indexer{
-    void index(String string);
-
-    void setFileName(String name);
-
-    void setDocToIndexPath(String absolutePath);
-
+    Document getDocument(Resource resource);
+    Document getDocumentFromObject(Object object);
+    void index(String string, Resource resource);
     void setUp(LiusConfig lc);
-
-    void setMimeType(String mimeType);
-
-    void setStreamToIndex(InputStream is);
-
-    void setMixedContentsObj(Object object);
-
-    void setObjectToIndex(Object object);
-
-    Document getDocument();
 }

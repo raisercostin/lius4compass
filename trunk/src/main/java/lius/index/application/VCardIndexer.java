@@ -22,15 +22,18 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
+import lius.config.LiusConfig;
 import lius.config.LiusField;
 import lius.config.LiusProxyField;
 import lius.config.LiusValueProxyField;
 import lius.index.BaseIndexer;
+import lius.index.ParsingResult;
 import lius.index.parser.VCardParser;
 import lius.index.util.LiusUtils;
 import lius.index.util.VCard;
 
 import org.apache.log4j.Logger;
+import org.springframework.core.io.Resource;
 
 /**
  * Class: VCardIndexer <br>
@@ -72,22 +75,19 @@ public class VCardIndexer extends BaseIndexer {
         return 1;
     }
 
-    public boolean isConfigured() {
-        boolean ef = false;
-        if (getLiusConfig().getVCardFields() != null)
-            return ef = true;
-        return ef;
+    public boolean isConfigured(LiusConfig liusConfig) {
+        return liusConfig.getVCardFields() != null;
     }
 
-    public Collection getConfigurationFields() {
-        return getLiusConfig().getVCardFields();
+    public Collection getConfigurationFields(LiusConfig liusConfig) {
+        return liusConfig.getVCardFields();
     }
 
-    public Collection getPopulatedLiusFields() {
+    public ParsingResult parseResource(LiusConfig liusConfig, Resource resource) {
         Collection c = new ArrayList();
         try {
-            VCardParser vcp = new VCardParser(getStreamToIndex());
-            for (Iterator i = getLiusConfig().getVCardFields().iterator(); i
+            VCardParser vcp = new VCardParser(resource);
+            for (Iterator i = liusConfig.getVCardFields().iterator(); i
                     .hasNext();) {
                 Object next = i.next();
                 if (next instanceof LiusField) {
@@ -99,7 +99,7 @@ public class VCardIndexer extends BaseIndexer {
         } catch (IOException e) {
             LiusUtils.doOnException( e);
         }
-        return c;
+        return new ParsingResult(c,"");
     }
 
     private void addVCardProxyFields(VCardParser vcp, LiusField lf, Collection c) {
@@ -151,9 +151,5 @@ public class VCardIndexer extends BaseIndexer {
                 c.add(lpf);
             }
         }
-    }
-
-    public String getContent() {
-        return null;
     }
 }

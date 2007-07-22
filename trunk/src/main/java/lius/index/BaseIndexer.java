@@ -17,7 +17,6 @@
 package lius.index;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Collection;
 import java.util.List;
 
@@ -32,25 +31,22 @@ import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
+import org.springframework.core.io.Resource;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
 public abstract class BaseIndexer implements Indexer, IndexService {
-    static Logger logger = Logger.getLogger(BaseIndexer.class);
-    private LiusConfig lc = null;
-    private Directory ramDir = null;
-    private LiusTransactionManager transaction = null;
-    private Document luceneDoc = null;
-    private InputStream streamToIndex = null;
-    private String mimeType = null;
-    private String fileName = null;
-    private Object objectToIndex = null;
-    private Object mixedContentsObj = null;
-    private String docToIndexPath = null;
     public final static int INDEXER_CONFIG_FIELDS_COL = 1;
     public final static int INDEXER_CONFIG_FIELDS_MAP = 2;
+    public static Logger logger = Logger.getLogger(BaseIndexer.class);
+
     protected LuceneActions luceneActions = new LuceneActions();
+    protected LiusConfig liusConfig = null;
+    private Directory ramDir = null;
+    private LiusTransactionManager transaction = null;
 
     public BaseIndexer() {
     }
@@ -60,21 +56,16 @@ public abstract class BaseIndexer implements Indexer, IndexService {
     }
 
     public void setUp(LiusConfig lc) {
-        this.lc = lc;
+        this.liusConfig = lc;
     }
 
-    public LiusConfig getLiusConfig() {
-        return lc;
-    }
-
-    public synchronized void indexUsingTransaction(String indexDir) {
-        luceneDoc = luceneActions.populateLuceneDoc(getPopulatedLiusFields());
-        if (docToIndexPath != null)
-            luceneDoc.add(new Field("filePath", docToIndexPath,
-                    Field.Store.YES, Field.Index.UN_TOKENIZED));
+    public synchronized void indexUsingTransaction(String indexDir,
+            Resource resource) {
+        Document luceneDoc = luceneActions
+                .populateLuceneDoc(parseResourceInternal(resource));
         ramDir = new RAMDirectory();
         transaction = new LiusTransactionManager(luceneDoc, ramDir, indexDir,
-                getLiusConfig());
+                liusConfig);
         try {
             transaction.start();
             transaction.commit();
@@ -84,54 +75,52 @@ public abstract class BaseIndexer implements Indexer, IndexService {
         }
     }
 
-    public void index(String indexDir) {
-        indexAndGetDocument(indexDir);
+    public void index(String indexDir, Resource resource) {
+        indexAndGetDocument(indexDir, resource);
     }
 
-    public synchronized Document getDocument() {
-        luceneDoc = luceneActions.populateLuceneDoc(getPopulatedLiusFields());
-        if (docToIndexPath != null)
-            luceneDoc.add(new Field("filePath", docToIndexPath,
-                    Field.Store.YES, Field.Index.UN_TOKENIZED));
+    public Document getDocument(Resource resource) {
+        Document luceneDoc = luceneActions
+                .populateLuceneDoc(parseResourceInternal(resource));
         return luceneDoc;
     }
 
-    public synchronized Document indexAndGetDocument(String indexDir) {
-        luceneDoc = luceneActions.populateLuceneDoc(getPopulatedLiusFields());
-        if (docToIndexPath != null)
-            luceneDoc.add(new Field("filePath", docToIndexPath,
-                    Field.Store.YES, Field.Index.UN_TOKENIZED));
+    public Document getDocumentFromObject(Object object) {
+        Document luceneDoc = luceneActions
+                .populateLuceneDoc(parseObjectInternal(object));
+        return luceneDoc;
+    }
+
+    public synchronized Document indexAndGetDocument(String indexDir,
+            Resource resource) {
+        Document luceneDoc = luceneActions
+                .populateLuceneDoc(parseResourceInternal(resource));
         try {
-            luceneActions.index(luceneDoc, indexDir, lc);
+            luceneActions.index(luceneDoc, indexDir, liusConfig);
         } catch (IOException e) {
             LiusUtils.doOnException(e);
         }
         return luceneDoc;
     }
 
-    public synchronized void index(String indexDir, List LuceneCostumFields) {
+    public synchronized void index(String indexDir, List LuceneCostumFields,
+            Resource resource) {
         Document luceneDoc = luceneActions
-                .populateLuceneDoc(getPopulatedLiusFields());
-        if (docToIndexPath != null)
-            luceneDoc.add(new Field("filePath", docToIndexPath,
-                    Field.Store.YES, Field.Index.UN_TOKENIZED));
+                .populateLuceneDoc(parseResourceInternal(resource));
         for (int i = 0; i < LuceneCostumFields.size(); i++) {
             luceneDoc.add((Field) LuceneCostumFields.get(i));
         }
         try {
-            luceneActions.index(luceneDoc, indexDir, lc);
+            luceneActions.index(luceneDoc, indexDir, liusConfig);
         } catch (IOException e) {
             LiusUtils.doOnException(e);
         }
     }
 
     public synchronized void indexWithCostumLiusFields(String indexDir,
-            List LuceneCostumFields) {
+            List LuceneCostumFields, Resource resource) {
         Document luceneDoc = luceneActions
-                .populateLuceneDoc(getPopulatedLiusFields());
-        if (docToIndexPath != null)
-            luceneDoc.add(new Field("filePath", docToIndexPath,
-                    Field.Store.YES, Field.Index.UN_TOKENIZED));
+                .populateLuceneDoc(parseResourceInternal(resource));
         for (int i = 0; i < LuceneCostumFields.size(); i++) {
             LiusField lf = (LiusField) LuceneCostumFields.get(i);
             Field field = null;
@@ -157,25 +146,22 @@ public abstract class BaseIndexer implements Indexer, IndexService {
             }
         }
         try {
-            luceneActions.index(luceneDoc, indexDir, lc);
+            luceneActions.index(luceneDoc, indexDir, liusConfig);
         } catch (IOException e) {
             LiusUtils.doOnException(e);
         }
     }
 
     public synchronized void indexUsingTransaction(String indexDir,
-            List LuceneCostumFields) {
+            List LuceneCostumFields, Resource resource) {
         Document luceneDoc = luceneActions
-                .populateLuceneDoc(getPopulatedLiusFields());
-        if (docToIndexPath != null)
-            luceneDoc.add(new Field("filePath", docToIndexPath,
-                    Field.Store.YES, Field.Index.UN_TOKENIZED));
+                .populateLuceneDoc(parseResourceInternal(resource));
         for (int i = 0; i < LuceneCostumFields.size(); i++) {
             luceneDoc.add((Field) LuceneCostumFields.get(i));
         }
         ramDir = new RAMDirectory();
         transaction = new LiusTransactionManager(luceneDoc, ramDir, indexDir,
-                getLiusConfig());
+                liusConfig);
         try {
             transaction.start();
             transaction.commit();
@@ -185,69 +171,38 @@ public abstract class BaseIndexer implements Indexer, IndexService {
         }
     }
 
-    public InputStream getStreamToIndex() {
-        return streamToIndex;
-    }
-
-    public void setStreamToIndex(InputStream streamToIndex) {
-        this.streamToIndex = streamToIndex;
-    }
-
-    public Object getObjectToIndex() {
-        return objectToIndex;
-    }
-
-    public void setObjectToIndex(Object objectToIndex) {
-        this.objectToIndex = objectToIndex;
-    }
-
-    public Object getMixedContentsObj() {
-        return mixedContentsObj;
-    }
-
-    public void setMixedContentsObj(Object mixedContentsObj) {
-        this.mixedContentsObj = mixedContentsObj;
-    }
-
-    public String getMimeType() {
-        return mimeType;
-    }
-
-    public void setMimeType(String mimeType) {
-        this.mimeType = mimeType;
-    }
-
-    public String getFileName() {
-        return fileName;
-    }
-
-    public void setFileName(String fileName) {
-        this.fileName = fileName;
-    }
-
-    public String getDocToIndexPath() {
-        return docToIndexPath;
-    }
-
-    public void setDocToIndexPath(String docToIndexPath) {
-        this.docToIndexPath = docToIndexPath;
-    }
-
-    protected Collection getTextFields() {
-        return getLiusConfig().getTexFields();
-    }
-
     protected LuceneActions getLuceneActions() {
         return luceneActions;
     }
 
     public abstract int getType();
 
-    public abstract Collection getConfigurationFields();
+    public abstract Collection getConfigurationFields(LiusConfig liusConfig);
 
-    public abstract String getContent();
+    public abstract boolean isConfigured(LiusConfig liusConfig);
 
-    public abstract Collection getPopulatedLiusFields();
+    public ParsingResult parseResource(LiusConfig liusConfig, Resource resource) {
+        throw new NotImplementedException();
+    }
 
-    public abstract boolean isConfigured();
+    public ParsingResult parseObject(LiusConfig liusConfig, Object mixedContent) {
+        throw new NotImplementedException();
+    }
+
+    public String getMimeType(Resource resource) {
+        return MimeTypeUtils.getMimeType(resource);
+    }
+
+    private Collection parseObjectInternal(Object object) {
+        ParsingResult parsingResult = parseObject(liusConfig, object);
+        parsingResult.reinit();
+        return parsingResult.getCollection();
+    }
+
+    private Collection parseResourceInternal(Resource resource) {
+        ParsingResult parsingResult = parseResource(liusConfig, resource);
+        parsingResult.setResource(resource);
+        parsingResult.reinit();
+        return parsingResult.getCollection();
+    }
 }

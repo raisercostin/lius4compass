@@ -24,8 +24,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import lius.config.LiusConfig;
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
+import lius.index.ParsingResult;
 import lius.index.util.LiusUtils;
 
 import org.apache.log4j.Logger;
@@ -34,6 +36,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.jdom.Element;
 import org.jdom.JDOMException;
 import org.jdom.xpath.XPath;
+import org.springframework.core.io.Resource;
 
 /**
  * Classe se basant sur JDOM et XPATH pour indexer des noeuds de documents XML.
@@ -56,17 +59,14 @@ public class XmlNodeIndexer extends BaseIndexer {
     }
 
     @Override
-    public boolean isConfigured() {
-        boolean ef = false;
-        if (getLiusConfig().getXmlFileFields() != null)
-            return ef = true;
-        return ef;
+    public boolean isConfigured(LiusConfig liusConfig) {
+        return liusConfig.getXmlFileFields() != null;
     }
 
     @Override
-    public Collection getConfigurationFields() {
+    public Collection getConfigurationFields(LiusConfig liusConfig) {
         List ls = new ArrayList();
-        ls.add(getLiusConfig().getXmlNodesFields());
+        ls.add(liusConfig.getXmlNodesFields());
         return ls;
     }
 
@@ -75,28 +75,36 @@ public class XmlNodeIndexer extends BaseIndexer {
     }
 
     @Override
-    public Collection getPopulatedLiusFields() {
+    public ParsingResult parseResource(LiusConfig liusConfig,
+            Resource resource) {
         logger
                 .info("Pour des raisons de performance cette méthode n'a pas été implémentée");
         return null;
     }
 
     public org.apache.lucene.document.Document storeNodeInLuceneDocument(
-            Object xmlDoc, Collection liusFields) {
-        Collection resColl = xfi.getPopulatedLiusFields(xmlDoc, liusFields);
+            Object xmlDoc, Collection liusFields, Resource resource) {
+        ParsingResult resColl = xfi.getPopulatedLiusFields(xmlDoc, liusFields,
+                resource);
         org.apache.lucene.document.Document luceneDoc = getLuceneActions()
-                .populateLuceneDoc(resColl);
+                .populateLuceneDoc(resColl.getCollection());
         return luceneDoc;
     }
 
     @Override
-    public synchronized void index(String indexDir) {
-        IndexWriter iw = null;
-        org.jdom.Document xmlDoc = LiusUtils.parse(getStreamToIndex());
+    public synchronized void index(String indexDir, Resource resource) {
+        InputStream inputStream;
         try {
-            Set s = getLiusConfig().getXmlNodesFields().keySet();
+            inputStream = resource.getInputStream();
+        } catch (IOException e1) {
+            throw new IllegalArgumentException(e1);
+        }
+        IndexWriter iw = null;
+        org.jdom.Document xmlDoc = LiusUtils.parse(inputStream);
+        try {
+            Set s = liusConfig.getXmlNodesFields().keySet();
             Object[] a = s.toArray();
-            iw = getLuceneActions().openIndex(indexDir, getLiusConfig());
+            iw = getLuceneActions().openIndex(indexDir, liusConfig);
             for (int i = 0; i < a.length; i++) {
                 String XpathNode = (String) a[i];
                 List ls = XPath.selectNodes(xmlDoc, XpathNode);
@@ -104,16 +112,16 @@ public class XmlNodeIndexer extends BaseIndexer {
                 while (it.hasNext()) {
                     Element elem = (Element) it.next();
                     org.apache.lucene.document.Document luceneDoc = storeNodeInLuceneDocument(
-                            elem, (Collection) getLiusConfig()
-                                    .getXmlNodesFields().get(XpathNode));
-                    getLuceneActions().save(luceneDoc, iw, getLiusConfig());
+                            elem, (Collection) liusConfig.getXmlNodesFields()
+                                    .get(XpathNode), resource);
+                    getLuceneActions().save(luceneDoc, iw, liusConfig);
                 }
             }
             iw.close();
         } catch (JDOMException e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
         } catch (IOException e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
         } finally {
             getLuceneActions().unLock(indexDir);
         }
@@ -121,13 +129,19 @@ public class XmlNodeIndexer extends BaseIndexer {
 
     @Override
     public synchronized void indexWithCostumLiusFields(String indexDir,
-            List LuceneCostumFields) {
-        IndexWriter iw = null;
-        org.jdom.Document xmlDoc = LiusUtils.parse(getStreamToIndex());
+            List LuceneCostumFields, Resource resource) {
+        InputStream inputStream;
         try {
-            Set s = getLiusConfig().getXmlNodesFields().keySet();
+            inputStream = resource.getInputStream();
+        } catch (IOException e1) {
+            throw new IllegalArgumentException(e1);
+        }
+        IndexWriter iw = null;
+        org.jdom.Document xmlDoc = LiusUtils.parse(inputStream);
+        try {
+            Set s = liusConfig.getXmlNodesFields().keySet();
             Object[] a = s.toArray();
-            iw = getLuceneActions().openIndex(indexDir, getLiusConfig());
+            iw = getLuceneActions().openIndex(indexDir, liusConfig);
             for (int i = 0; i < a.length; i++) {
                 String XpathNode = (String) a[i];
                 List ls = XPath.selectNodes(xmlDoc, XpathNode);
@@ -135,8 +149,8 @@ public class XmlNodeIndexer extends BaseIndexer {
                 while (it.hasNext()) {
                     Element elem = (Element) it.next();
                     org.apache.lucene.document.Document luceneDoc = storeNodeInLuceneDocument(
-                            elem, (Collection) getLiusConfig()
-                                    .getXmlNodesFields().get(XpathNode));
+                            elem, (Collection) liusConfig.getXmlNodesFields()
+                                    .get(XpathNode), resource);
                     for (int m = 0; m < LuceneCostumFields.size(); m++) {
                         LiusField lf = (LiusField) LuceneCostumFields.get(m);
                         Field field = null;
@@ -160,23 +174,20 @@ public class XmlNodeIndexer extends BaseIndexer {
                             luceneDoc.add(field);
                         }
                     }
-                    getLuceneActions().save(luceneDoc, iw, getLiusConfig());
+                    getLuceneActions().save(luceneDoc, iw, liusConfig);
                 }
             }
             iw.close();
         } catch (JDOMException e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
         } catch (IOException e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
         } finally {
             getLuceneActions().unLock(indexDir);
         }
     }
 
-    @Override
-    public String getContent() {
-        BaseIndexer indexer = xfi;
-        indexer.setStreamToIndex(getStreamToIndex());
-        return indexer.getContent();
+    private String getContent(Resource resource) throws IOException {
+        return xfi.getContent(resource);
     }
 }

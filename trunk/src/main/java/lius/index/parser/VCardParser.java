@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Vector;
 
+import org.springframework.core.io.Resource;
+
 import lius.index.util.VCard;
 
 /**
@@ -56,6 +58,10 @@ public class VCardParser {
 
     public VCardParser(String filename) throws IOException {
         this(new File(filename));
+    }
+
+    public VCardParser(Resource resource) throws IOException {
+        this(resource.getInputStream());
     }
 
     /**

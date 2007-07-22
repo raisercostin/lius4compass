@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import org.springframework.core.io.Resource;
+
 /**
  * Class: TexParser <br>
  * Read some interesting meta-data from LaTeX source files. Changelog:
@@ -62,6 +64,10 @@ public class TexParser {
 
     public TexParser(File texFile) throws IOException {
         this(new FileInputStream(texFile));
+    }
+
+    public TexParser(Resource resource) throws IOException {
+        this(resource.getInputStream());
     }
 
     private String getField(String text, String startPattern, String endPattern) {

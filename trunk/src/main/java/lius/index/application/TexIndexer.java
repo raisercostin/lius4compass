@@ -21,13 +21,16 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import lius.config.LiusConfig;
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
 import lius.index.Indexer;
+import lius.index.ParsingResult;
 import lius.index.parser.TexParser;
 import lius.index.util.LiusUtils;
 
 import org.apache.log4j.Logger;
+import org.springframework.core.io.Resource;
 
 /**
  * Class: TexIndexer <br>
@@ -48,28 +51,24 @@ public class TexIndexer extends BaseIndexer implements Indexer {
         return 1;
     }
 
-    public boolean isConfigured() {
-        boolean ef = false;
-        if (getTextFields() != null)
-            return ef = true;
-        return ef;
+    public boolean isConfigured(LiusConfig liusConfig) {
+        return liusConfig.getTexFields() != null;
     }
 
-    public Collection getConfigurationFields() {
-        return getTextFields();
+    public Collection getConfigurationFields(LiusConfig liusConfig) {
+        return liusConfig.getTexFields();
     }
 
     /**
      * @see lius.index.BaseIndexer#getPopulatedCollection(java.lang.Object,
      *      java.util.Collection)
      */
-    public Collection getPopulatedLiusFields() {
-        Collection c = new ArrayList();
-        TexParser tp;
+    public ParsingResult parseResource(LiusConfig liusConfig,
+            Resource resource) {
         try {
-            tp = new TexParser(getStreamToIndex());
-            for (Iterator i = getTextFields().iterator(); i
-                    .hasNext();) {
+            Collection c = new ArrayList();
+            TexParser tp = new TexParser(resource);
+            for (Iterator i = liusConfig.getTexFields().iterator(); i.hasNext();) {
                 Object next = i.next();
                 if (next instanceof LiusField) {
                     LiusField lf = (LiusField) next;
@@ -92,20 +91,14 @@ public class TexIndexer extends BaseIndexer implements Indexer {
                 } else
                     c.add(next);
             }
+            return new ParsingResult(c, getContent(tp));
         } catch (IOException e) {
-            LiusUtils.doOnException( e);
+            throw new IllegalArgumentException(e);
         }
-        return c;
     }
 
-    public String getContent() {
+    public String getContent(TexParser tp) {
         StringBuffer sb = new StringBuffer();
-        TexParser tp = null;
-        try {
-            tp = new TexParser(getStreamToIndex());
-        } catch (IOException e) {
-            LiusUtils.doOnException( e);
-        }
         sb.append(tp.getDocumentclass() + " ");
         sb.append(tp.getTitle() + " ");
         sb.append(tp.getAuthor() + " ");

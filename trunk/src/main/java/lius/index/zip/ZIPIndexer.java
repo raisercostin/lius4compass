@@ -16,16 +16,20 @@ package lius.index.zip;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import lius.config.LiusConfig;
 import lius.index.BaseIndexer;
 import lius.index.Indexer;
 import lius.index.IndexerFactory;
-import lius.index.BaseIndexer;
+import lius.index.MimeTypeUtils;
+import lius.index.ParsingResult;
 
 import org.apache.log4j.Logger;
+import org.springframework.core.io.Resource;
 
 /**
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
@@ -39,39 +43,35 @@ public class ZIPIndexer extends BaseIndexer {
     }
 
     @Override
-    public boolean isConfigured() {
+    public boolean isConfigured(LiusConfig liusConfig) {
         boolean ef = false;
-        if (getLiusConfig().getZipFields() != null)
+        if (liusConfig.getZipFields() != null)
             return ef = true;
         return ef;
     }
 
     @Override
-    public Collection getConfigurationFields() {
-        return getLiusConfig().getZipFields();
+    public Collection getConfigurationFields(LiusConfig liusConfig) {
+        return liusConfig.getZipFields();
     }
 
     @Override
-    public String getContent() {
-        StringBuffer content = new StringBuffer();
-        List indexers = IndexerFactory.getIndexersFromZipInputStream(
-                getStreamToIndex(), getLiusConfig());
-        for (int i = 0; i < indexers.size(); i++) {
-            content.append(((Indexer) indexers.get(i)).getContent());
+    public ParsingResult parseResource(LiusConfig liusConfig,
+            Resource resource) {
+        try {
+            ParsingResult resColl = new ParsingResult("");
+            Indexer indexer = null;
+            List indexers = IndexerFactory.getIndexersFromZipResource(resource,
+                    liusConfig);
+            for (int i = 0; i < indexers.size(); i++) {
+                indexer = (Indexer) indexers.get(i);
+                resColl.addAll(indexer.parseResource(liusConfig,
+                        resource));
+            }
+            resColl.reinit();
+            return resColl;
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
         }
-        return content.toString();
-    }
-
-    @Override
-    public Collection getPopulatedLiusFields() {
-        Collection resColl = new ArrayList();
-        Indexer indexer = null;
-        List indexers = IndexerFactory.getIndexersFromZipInputStream(
-                getStreamToIndex(), getLiusConfig());
-        for (int i = 0; i < indexers.size(); i++) {
-            indexer = (Indexer) indexers.get(i);
-            resColl.addAll(indexer.getPopulatedLiusFields());
-        }
-        return resColl;
     }
 }
