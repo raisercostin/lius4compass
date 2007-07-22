@@ -29,12 +29,12 @@ import java.io.OutputStreamWriter;
 import java.util.Collection;
 
 import lius.index.BaseIndexer;
+import lius.index.BaseIndexer;
 import lius.index.xml.XmlFileIndexer;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.cyberneko.html.parsers.DOMParser;
-import org.jdom.JDOMException;
 import org.jdom.input.DOMBuilder;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -47,8 +47,12 @@ import org.xml.sax.SAXException;
  * @author Nicolas Belisle (nicolas.belisle@doculibre.com)
  */
 public class NekoHtmlIndexer extends BaseIndexer {
-    static Logger logger = Logger.getLogger(NekoHtmlIndexer.class);
-    private XmlFileIndexer xfi = new XmlFileIndexer();
+    public static Logger logger = Logger.getLogger(NekoHtmlIndexer.class);
+    private XmlFileIndexer xfi;
+
+    public NekoHtmlIndexer() {
+        xfi = new XmlFileIndexer();
+    }
 
     @Override
     public int getType() {

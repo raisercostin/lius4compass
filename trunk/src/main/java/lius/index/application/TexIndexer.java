@@ -23,6 +23,8 @@ import java.util.Iterator;
 
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
+import lius.index.Indexer;
+import lius.index.BaseIndexer;
 import lius.util.parser.TexParser;
 
 import org.apache.log4j.Logger;
@@ -39,38 +41,34 @@ import org.apache.log4j.Logger;
 /**
  * Adapted by Rida Benjelloun
  */
-public class TexIndexer extends BaseIndexer {
-    static Logger logger = Logger.getLogger(TexIndexer.class);
+public class TexIndexer extends BaseIndexer implements Indexer {
+    public static Logger logger = Logger.getLogger(TexIndexer.class);
 
-    @Override
     public int getType() {
         return 1;
     }
 
-    @Override
     public boolean isConfigured() {
         boolean ef = false;
-        if (getLiusConfig().getTexFields() != null)
+        if (getTextFields() != null)
             return ef = true;
         return ef;
     }
 
-    @Override
     public Collection getConfigurationFields() {
-        return getLiusConfig().getTexFields();
+        return getTextFields();
     }
 
     /**
      * @see lius.index.BaseIndexer#getPopulatedCollection(java.lang.Object,
      *      java.util.Collection)
      */
-    @Override
     public Collection getPopulatedLiusFields() {
         Collection c = new ArrayList();
         TexParser tp;
         try {
             tp = new TexParser(getStreamToIndex());
-            for (Iterator i = getLiusConfig().getTexFields().iterator(); i
+            for (Iterator i = getTextFields().iterator(); i
                     .hasNext();) {
                 Object next = i.next();
                 if (next instanceof LiusField) {
@@ -100,7 +98,6 @@ public class TexIndexer extends BaseIndexer {
         return c;
     }
 
-    @Override
     public String getContent() {
         StringBuffer sb = new StringBuffer();
         TexParser tp = null;
