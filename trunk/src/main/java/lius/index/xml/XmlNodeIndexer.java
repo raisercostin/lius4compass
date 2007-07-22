@@ -27,8 +27,8 @@ import java.util.Set;
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
 import lius.index.BaseIndexer;
+import lius.index.util.LiusUtils;
 import lius.lucene.LuceneActions;
-import lius.util.LiusUtils;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Field;

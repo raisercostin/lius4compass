@@ -25,7 +25,7 @@ import lius.config.LiusField;
 import lius.index.BaseIndexer;
 import lius.index.Indexer;
 import lius.index.BaseIndexer;
-import lius.util.parser.TexParser;
+import lius.index.parser.TexParser;
 
 import org.apache.log4j.Logger;
 
