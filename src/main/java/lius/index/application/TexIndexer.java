@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import lius.config.LiusField;
-import lius.index.Indexer;
+import lius.index.BaseIndexer;
 import lius.util.parser.TexParser;
 
 import org.apache.log4j.Logger;
@@ -39,7 +39,7 @@ import org.apache.log4j.Logger;
 /**
  * Adapted by Rida Benjelloun
  */
-public class TexIndexer extends Indexer {
+public class TexIndexer extends BaseIndexer {
     static Logger logger = Logger.getLogger(TexIndexer.class);
 
     @Override
@@ -61,7 +61,7 @@ public class TexIndexer extends Indexer {
     }
 
     /**
-     * @see lius.index.Indexer#getPopulatedCollection(java.lang.Object,
+     * @see lius.index.BaseIndexer#getPopulatedCollection(java.lang.Object,
      *      java.util.Collection)
      */
     @Override

@@ -20,7 +20,7 @@ import java.io.File;
 import java.io.IOException;
 
 import lius.config.LiusConfig;
-import lius.index.Indexer;
+import lius.index.BaseIndexer;
 import lius.index.mixedindexing.MixedIndexer;
 import lius.lucene.LuceneActions;
 
@@ -88,7 +88,7 @@ public class ThreadIndexer {
                         @Override
                         public void run() {
                             System.out.println(tmpsIndexPath[ct]);
-                            Indexer indexer = new MixedIndexer();
+                            BaseIndexer indexer = new MixedIndexer();
                             indexer.setUp(lc);
                             indexer.setMixedContentsObj(toIndexF);
                             // IndexerFactory.getIndexer(toIndexF,lc);

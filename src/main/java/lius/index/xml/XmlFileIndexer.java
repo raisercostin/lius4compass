@@ -24,7 +24,7 @@ import java.util.List;
 import java.util.Map;
 
 import lius.config.LiusField;
-import lius.index.Indexer;
+import lius.index.BaseIndexer;
 import lius.util.LiusUtils;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -48,7 +48,7 @@ import org.jdom.Text;
  * 
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
-public class XmlFileIndexer extends Indexer {
+public class XmlFileIndexer extends BaseIndexer {
     private SimpleNamespaceContext nsc = new SimpleNamespaceContext();
     static Logger logger = Logger.getLogger(XmlFileIndexer.class);
 

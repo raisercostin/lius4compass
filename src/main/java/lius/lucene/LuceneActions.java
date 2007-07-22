@@ -28,7 +28,7 @@ import java.util.Map;
 import lius.config.LiusConfig;
 import lius.config.LiusDocumentProperty;
 import lius.config.LiusField;
-import lius.index.Indexer;
+import lius.index.BaseIndexer;
 import lius.index.IndexerFactory;
 import lius.search.LiusHit;
 
@@ -319,7 +319,7 @@ public class LuceneActions {
 
     private void fileDirectoryProcessing(File f, String indexDir,
             LiusConfig lc, IndexWriter iw) throws IOException {
-        Indexer indexer = null;
+        BaseIndexer indexer = null;
         if (f.isFile()) {
             indexer = IndexerFactory.getIndexer(f, lc);
             if (indexer != null) {
@@ -412,7 +412,7 @@ public class LuceneActions {
      * fileDirectoryIndexing(), for indexing related to the file type.
      */
     private void fileProcessing(File fileToIndex, String indexDir, LiusConfig lc) {
-        Indexer indexer = null;
+        BaseIndexer indexer = null;
         indexer = IndexerFactory.getIndexer(fileToIndex, lc);
         if (indexer != null) {
             if (logger.isDebugEnabled()) {

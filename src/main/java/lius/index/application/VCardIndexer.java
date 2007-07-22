@@ -25,7 +25,7 @@ import java.util.List;
 import lius.config.LiusField;
 import lius.config.LiusProxyField;
 import lius.config.LiusValueProxyField;
-import lius.index.Indexer;
+import lius.index.BaseIndexer;
 import lius.util.VCard;
 import lius.util.parser.VCardParser;
 
@@ -64,7 +64,7 @@ import org.apache.log4j.Logger;
 /**
  * Adapted by Rida Benjelloun
  */
-public class VCardIndexer extends Indexer {
+public class VCardIndexer extends BaseIndexer {
     static Logger logger = Logger.getLogger(VCardIndexer.class);
 
     @Override

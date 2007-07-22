@@ -28,7 +28,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
 
-import lius.index.Indexer;
+import lius.index.BaseIndexer;
 import lius.index.xml.XmlFileIndexer;
 
 import org.apache.commons.io.FileUtils;
@@ -46,7 +46,7 @@ import org.xml.sax.SAXException;
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  * @author Nicolas Belisle (nicolas.belisle@doculibre.com)
  */
-public class NekoHtmlIndexer extends Indexer {
+public class NekoHtmlIndexer extends BaseIndexer {
     static Logger logger = Logger.getLogger(NekoHtmlIndexer.class);
     private XmlFileIndexer xfi = new XmlFileIndexer();
 

@@ -22,7 +22,7 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import lius.config.LiusField;
-import lius.index.Indexer;
+import lius.index.BaseIndexer;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -33,7 +33,7 @@ import org.w3c.tidy.Tidy;
 /**
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
-public class JTidyHtmlIndexer extends Indexer {
+public class JTidyHtmlIndexer extends BaseIndexer {
     private Node root = null;
 
     @Override
