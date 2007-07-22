@@ -26,7 +26,7 @@ import java.util.Map;
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
 import lius.index.BaseIndexer;
-import lius.util.LiusUtils;
+import lius.index.util.LiusUtils;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.log4j.Logger;

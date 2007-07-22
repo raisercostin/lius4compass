@@ -22,10 +22,10 @@ import java.util.StringTokenizer;
 import junit.framework.TestCase;
 import lius.config.LiusConfig;
 import lius.config.LiusConfigBuilder;
+import lius.index.util.LiusUtils;
 import lius.lucene.LuceneActions;
 import lius.search.LiusHitList;
 import lius.search.SearchIndex;
-import lius.util.LiusUtils;
 
 import org.springframework.core.io.ClassPathResource;
 

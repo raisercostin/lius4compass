@@ -27,8 +27,8 @@ import lius.config.LiusProxyField;
 import lius.config.LiusValueProxyField;
 import lius.index.BaseIndexer;
 import lius.index.BaseIndexer;
-import lius.util.VCard;
-import lius.util.parser.VCardParser;
+import lius.index.parser.VCardParser;
+import lius.index.util.VCard;
 
 import org.apache.log4j.Logger;
 
