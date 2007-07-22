@@ -26,6 +26,7 @@ import java.net.URL;
 import junit.framework.TestCase;
 import lius.config.LiusConfig;
 import lius.config.LiusConfigBuilder;
+import lius.index.IndexService;
 import lius.index.Indexer;
 import lius.index.IndexerFactory;
 import lius.index.javaobject.BeanIndexer;
@@ -44,7 +45,7 @@ public class LiusTestIndexation extends TestCase {
     // private File classDir;
     private File toIndex;
     private LiusConfig lc;
-    private Indexer indexer = null;
+    private IndexService indexer = null;
 
     public LiusTestIndexation(String name) {
         super(name);

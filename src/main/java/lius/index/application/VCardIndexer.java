@@ -26,6 +26,7 @@ import lius.config.LiusField;
 import lius.config.LiusProxyField;
 import lius.config.LiusValueProxyField;
 import lius.index.BaseIndexer;
+import lius.index.BaseIndexer;
 import lius.util.VCard;
 import lius.util.parser.VCardParser;
 
@@ -67,12 +68,10 @@ import org.apache.log4j.Logger;
 public class VCardIndexer extends BaseIndexer {
     static Logger logger = Logger.getLogger(VCardIndexer.class);
 
-    @Override
     public int getType() {
         return 1;
     }
 
-    @Override
     public boolean isConfigured() {
         boolean ef = false;
         if (getLiusConfig().getVCardFields() != null)
@@ -80,12 +79,10 @@ public class VCardIndexer extends BaseIndexer {
         return ef;
     }
 
-    @Override
     public Collection getConfigurationFields() {
         return getLiusConfig().getVCardFields();
     }
 
-    @Override
     public Collection getPopulatedLiusFields() {
         Collection c = new ArrayList();
         try {
@@ -156,7 +153,6 @@ public class VCardIndexer extends BaseIndexer {
         }
     }
 
-    @Override
     public String getContent() {
         return null;
     }

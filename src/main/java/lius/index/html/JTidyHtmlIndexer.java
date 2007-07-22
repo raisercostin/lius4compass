@@ -23,6 +23,7 @@ import java.util.Iterator;
 
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
+import lius.index.BaseIndexer;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;

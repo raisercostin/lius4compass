@@ -26,6 +26,8 @@ import java.util.Set;
 
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
+import lius.index.BaseIndexer;
+import lius.lucene.LuceneActions;
 import lius.util.LiusUtils;
 
 import org.apache.log4j.Logger;
@@ -43,8 +45,12 @@ import org.jdom.xpath.XPath;
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
 public class XmlNodeIndexer extends BaseIndexer {
-    static Logger logger = Logger.getLogger(XmlNodeIndexer.class);
-    private XmlFileIndexer xfi = new XmlFileIndexer();
+    public static Logger logger = Logger.getLogger(XmlNodeIndexer.class);
+    private XmlFileIndexer xfi;
+
+    public XmlNodeIndexer() {
+        xfi = new XmlFileIndexer();
+    }
 
     @Override
     public int getType() {
@@ -80,7 +86,7 @@ public class XmlNodeIndexer extends BaseIndexer {
     public org.apache.lucene.document.Document storeNodeInLuceneDocument(
             Object xmlDoc, Collection liusFields) {
         Collection resColl = xfi.getPopulatedLiusFields(xmlDoc, liusFields);
-        org.apache.lucene.document.Document luceneDoc = luceneActions
+        org.apache.lucene.document.Document luceneDoc = getLuceneActions()
                 .populateLuceneDoc(resColl);
         return luceneDoc;
     }
@@ -92,7 +98,7 @@ public class XmlNodeIndexer extends BaseIndexer {
         try {
             Set s = getLiusConfig().getXmlNodesFields().keySet();
             Object[] a = s.toArray();
-            iw = luceneActions.openIndex(indexDir, getLiusConfig());
+            iw = getLuceneActions().openIndex(indexDir, getLiusConfig());
             for (int i = 0; i < a.length; i++) {
                 String XpathNode = (String) a[i];
                 List ls = XPath.selectNodes(xmlDoc, XpathNode);
@@ -102,7 +108,7 @@ public class XmlNodeIndexer extends BaseIndexer {
                     org.apache.lucene.document.Document luceneDoc = storeNodeInLuceneDocument(
                             elem, (Collection) getLiusConfig()
                                     .getXmlNodesFields().get(XpathNode));
-                    luceneActions.save(luceneDoc, iw, getLiusConfig());
+                    getLuceneActions().save(luceneDoc, iw, getLiusConfig());
                 }
             }
             iw.close();
@@ -111,7 +117,7 @@ public class XmlNodeIndexer extends BaseIndexer {
         } catch (IOException e) {
             logger.error("Generic error.", e);
         } finally {
-            luceneActions.unLock(indexDir);
+            getLuceneActions().unLock(indexDir);
         }
     }
 
@@ -123,7 +129,7 @@ public class XmlNodeIndexer extends BaseIndexer {
         try {
             Set s = getLiusConfig().getXmlNodesFields().keySet();
             Object[] a = s.toArray();
-            iw = luceneActions.openIndex(indexDir, getLiusConfig());
+            iw = getLuceneActions().openIndex(indexDir, getLiusConfig());
             for (int i = 0; i < a.length; i++) {
                 String XpathNode = (String) a[i];
                 List ls = XPath.selectNodes(xmlDoc, XpathNode);
@@ -156,7 +162,7 @@ public class XmlNodeIndexer extends BaseIndexer {
                             luceneDoc.add(field);
                         }
                     }
-                    luceneActions.save(luceneDoc, iw, getLiusConfig());
+                    getLuceneActions().save(luceneDoc, iw, getLiusConfig());
                 }
             }
             iw.close();
@@ -165,7 +171,7 @@ public class XmlNodeIndexer extends BaseIndexer {
         } catch (IOException e) {
             logger.error("Generic error.", e);
         } finally {
-            luceneActions.unLock(indexDir);
+            getLuceneActions().unLock(indexDir);
         }
     }
 

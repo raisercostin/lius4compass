@@ -21,7 +21,9 @@ import java.util.Collection;
 import java.util.List;
 
 import lius.index.BaseIndexer;
+import lius.index.Indexer;
 import lius.index.IndexerFactory;
+import lius.index.BaseIndexer;
 
 import org.apache.log4j.Logger;
 
@@ -55,7 +57,7 @@ public class ZIPIndexer extends BaseIndexer {
         List indexers = IndexerFactory.getIndexersFromZipInputStream(
                 getStreamToIndex(), getLiusConfig());
         for (int i = 0; i < indexers.size(); i++) {
-            content.append(((BaseIndexer) indexers.get(i)).getContent());
+            content.append(((Indexer) indexers.get(i)).getContent());
         }
         return content.toString();
     }
@@ -63,11 +65,11 @@ public class ZIPIndexer extends BaseIndexer {
     @Override
     public Collection getPopulatedLiusFields() {
         Collection resColl = new ArrayList();
-        BaseIndexer indexer = null;
+        Indexer indexer = null;
         List indexers = IndexerFactory.getIndexersFromZipInputStream(
                 getStreamToIndex(), getLiusConfig());
         for (int i = 0; i < indexers.size(); i++) {
-            indexer = (BaseIndexer) indexers.get(i);
+            indexer = (Indexer) indexers.get(i);
             resColl.addAll(indexer.getPopulatedLiusFields());
         }
         return resColl;
