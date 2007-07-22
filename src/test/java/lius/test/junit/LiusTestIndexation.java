@@ -17,7 +17,6 @@ package lius.test.junit;
  * limitations under the License.
  */
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -34,6 +33,7 @@ import lius.index.xml.XmlNodeIndexer;
 import lius.test.beans.Personne;
 
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 
 /**
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
@@ -41,7 +41,7 @@ import org.springframework.core.io.ClassPathResource;
 public class LiusTestIndexation extends TestCase {
     private String indexDir;
     // private File classDir;
-    private File toIndex;
+    private Resource toIndex;
     private LiusConfig lc;
     private IndexService indexer = null;
 
@@ -52,92 +52,85 @@ public class LiusTestIndexation extends TestCase {
     @Override
     protected void setUp() {
         indexDir = new File("target/indexDir").getAbsolutePath();
-        lc = LiusConfigBuilder.getSingletonInstance().getLiusConfig(new ClassPathResource("liusConfig.xml"));
+        lc = LiusConfigBuilder.getSingletonInstance().getLiusConfig(
+                new ClassPathResource("liusConfig.xml"));
     }
 
     public void testPdfFactoryIndexing() {
         String string = "testPDF.pdf";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testWordFactoryIndexing() {
         String string = "testWORD.doc";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
-    }
-
-    private File getFile(String fileName) {
-        try {
-            return new ClassPathResource("testFiles/" + fileName).getFile();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        indexer.index(indexDir,toIndex);
     }
 
     public void testRtfFactoryIndexing() {
         String string = "testRTF.rtf";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testXmlFactoryIndexing() {
         String string = "testXML.xml";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testExcelFactoryIndexing() {
         String string = "testEXCEL.xls";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testPptFactoryIndexing() {
         String string = "testPPT.ppt";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void _testOpenOfficeFactoryIndexingBad() {
         String string = "testOO.sxw";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testOpenOfficeFactoryIndexing() {
         String string = "testOO1.sxw";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testOpenOffice2FactoryIndexing() {
         String string = "testOO2.odt";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testZipFactoryIndexing() {
         String string = "testZIP.zip";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testTextFactoryIndexing() {
         String string = "testTXT.txt";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     /*
@@ -148,32 +141,31 @@ public class LiusTestIndexation extends TestCase {
      */
     public void testHtmlFactoryIndexing() {
         String string = "testHTML.html";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testMixedIndexing() throws IOException {
-        toIndex = new ClassPathResource("testMixedIndexing").getFile();
+        toIndex = new ClassPathResource("testMixedIndexing");
         indexer = new MixedIndexer();
         indexer.setUp(lc);
-        indexer.setMixedContentsObj(toIndex);
-        indexer.index(indexDir);
+        //indexer.setMixedContentsObj(toIndex);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testUrlIndexing() throws MalformedURLException {
         URL url = new URL("http://www.doculibre.com/index.html");
         indexer = IndexerFactory.getIndexer(url, lc);
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
-    public void testNodeIndexing() throws FileNotFoundException {
+    public void testNodeIndexing(){
         String string = "testXMLNode.xml";
-        toIndex = getFile(string);
+        toIndex = new ClassPathResource("testFiles/" + string);
         indexer = new XmlNodeIndexer();
         indexer.setUp(lc);
-        indexer.setStreamToIndex(new FileInputStream(toIndex));
-        indexer.index(indexDir);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testBeanIndexing() {
@@ -183,7 +175,7 @@ public class LiusTestIndexation extends TestCase {
         personne.setAdresse("Quebec Canada");
         indexer = new BeanIndexer();
         indexer.setUp(lc);
-        indexer.setObjectToIndex(personne);
-        indexer.index(indexDir);
+        //indexer.setObjectToIndex(personne);
+        indexer.index(indexDir, toIndex);
     }
 }

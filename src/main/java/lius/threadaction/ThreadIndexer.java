@@ -89,8 +89,8 @@ public class ThreadIndexer {
                         @Override
                         public void run() {
                             System.out.println(tmpsIndexPath[ct]);
-                            IndexService indexer = IndexerFactory.createMixedIndexer(toIndexF,lc);
-                            indexer.index(tmpsIndexPath[ct]);
+                            IndexService indexer = IndexerFactory.getIndexer(new FileSystemResource(toIndexF),lc);
+                            indexer.index(tmpsIndexPath[ct],new FileSystemResource(toIndexF));
                             r++;
                         }
                     };

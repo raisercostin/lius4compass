@@ -16,6 +16,7 @@ package lius.index.xml;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,9 +24,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import lius.config.LiusConfig;
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
-import lius.index.BaseIndexer;
+import lius.index.ParsingResult;
 import lius.index.util.LiusUtils;
 
 import org.apache.commons.beanutils.BeanUtils;
@@ -42,6 +44,7 @@ import org.jdom.EntityRef;
 import org.jdom.Namespace;
 import org.jdom.ProcessingInstruction;
 import org.jdom.Text;
+import org.springframework.core.io.Resource;
 
 /**
  * Classe se basant sur JDOM et XPATH pour indexer des fichiers XML. <br/><br/>
@@ -50,8 +53,12 @@ import org.jdom.Text;
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
 public class XmlFileIndexer extends BaseIndexer {
-    private SimpleNamespaceContext nsc = new SimpleNamespaceContext();
-    static Logger logger = Logger.getLogger(XmlFileIndexer.class);
+    public static Logger logger = Logger.getLogger(XmlFileIndexer.class);
+    private SimpleNamespaceContext nsc;
+
+    public XmlFileIndexer() {
+        nsc = new SimpleNamespaceContext();
+    }
 
     @Override
     public int getType() {
@@ -59,21 +66,22 @@ public class XmlFileIndexer extends BaseIndexer {
     }
 
     @Override
-    public boolean isConfigured() {
-        boolean ef = false;
-        if (getLiusConfig().getXmlFileFields() != null)
-            return ef = true;
-        return ef;
+    public boolean isConfigured(LiusConfig liusConfig) {
+        return liusConfig.getXmlFileFields() != null;
     }
 
     @Override
-    public Collection getConfigurationFields() {
-        return getLiusConfig().getXmlFileFields();
+    public Collection getConfigurationFields(LiusConfig liusConfig) {
+        return liusConfig.getXmlFileFields();
     }
 
-    @Override
-    public String getContent() {
-        return concatOccurance(LiusUtils.parse(getStreamToIndex()), "//*", "");
+    public String getContent(Resource resource) {
+        try {
+            return concatOccurance(LiusUtils.parse(resource.getInputStream()),
+                    "//*", "");
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
     /**
@@ -141,19 +149,23 @@ public class XmlFileIndexer extends BaseIndexer {
      * text, title, etc.
      */
     @Override
-    public Collection getPopulatedLiusFields() {
-        Document xmlDoc = LiusUtils.parse(getStreamToIndex());
-        return getPopulatedLiusFields(xmlDoc, getLiusConfig()
-                .getXmlFileFields());
+    public ParsingResult parseResource(LiusConfig liusConfig,
+            Resource resource) {
+        try {
+            Document xmlDoc = LiusUtils.parse(resource.getInputStream());
+            return getPopulatedLiusFields(xmlDoc, liusConfig.getXmlFileFields(),resource);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 
-    public Collection getPopulatedLiusFields(Object xml,
-            Collection liusXmlFields) {
+    public ParsingResult getPopulatedLiusFields(Object xml,
+            Collection liusXmlFields, Resource resource) {
         List documentNs = null;
         Map hm = null;
         boolean nsTrouve = false;
         boolean isMap = false;
-        Collection resColl = new ArrayList();
+        ParsingResult resColl = new ParsingResult(getContent(resource));
         if (xml instanceof org.jdom.Document) {
             documentNs = getAllDocumentNs((org.jdom.Document) xml);
         }
@@ -183,7 +195,7 @@ public class XmlFileIndexer extends BaseIndexer {
     }
 
     private void extractDataFromElements(Object xmlDoc, Collection liusFields,
-            Collection resColl) {
+            ParsingResult resColl) {
         Iterator it = liusFields.iterator();
         while (it.hasNext()) {
             Object field = it.next();
@@ -238,11 +250,11 @@ public class XmlFileIndexer extends BaseIndexer {
                             }
                         }
                     } catch (JaxenException e) {
-                        LiusUtils.doOnException( e);
+                        LiusUtils.doOnException(e);
                     } catch (InvocationTargetException ex) {
-                        LiusUtils.doOnException(ex.getMessage(),ex);
+                        LiusUtils.doOnException(ex.getMessage(), ex);
                     } catch (IllegalAccessException ex) {
-                        LiusUtils.doOnException(ex.getMessage(),ex);
+                        LiusUtils.doOnException(ex.getMessage(), ex);
                     }
                 }
             } else {

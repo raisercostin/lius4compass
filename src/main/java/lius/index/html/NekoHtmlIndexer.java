@@ -28,7 +28,9 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Collection;
 
+import lius.config.LiusConfig;
 import lius.index.BaseIndexer;
+import lius.index.ParsingResult;
 import lius.index.util.LiusUtils;
 import lius.index.xml.XmlFileIndexer;
 
@@ -36,6 +38,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.cyberneko.html.parsers.DOMParser;
 import org.jdom.input.DOMBuilder;
+import org.springframework.core.io.Resource;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -60,16 +63,16 @@ public class NekoHtmlIndexer extends BaseIndexer {
     }
 
     @Override
-    public boolean isConfigured() {
+    public boolean isConfigured(LiusConfig liusConfig) {
         boolean ef = false;
-        if (getLiusConfig().getHtmlFields() != null)
+        if (liusConfig.getHtmlFields() != null)
             return ef = true;
         return ef;
     }
 
     @Override
-    public Collection getConfigurationFields() {
-        return getLiusConfig().getHtmlFields();
+    public Collection getConfigurationFields(LiusConfig liusConfig) {
+        return liusConfig.getHtmlFields();
     }
 
     private File omitXMLDeclaration(InputStream fis)
@@ -117,12 +120,12 @@ public class NekoHtmlIndexer extends BaseIndexer {
             org.w3c.dom.Document domDoc = parser.getDocument();
             jdomDoc = convert(domDoc);
         } catch (SAXException e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
         } catch (IOException e) {
             e.printStackTrace();
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
         } catch (Exception e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
         } finally {
             try {
                 try {
@@ -148,13 +151,14 @@ public class NekoHtmlIndexer extends BaseIndexer {
     }
 
     @Override
-    public Collection getPopulatedLiusFields() {
-        org.jdom.Document jdomDoc = this.parse(getStreamToIndex());
-        return xfi.getPopulatedLiusFields(jdomDoc, getConfigurationFields());
-    }
-
-    @Override
-    public String getContent() {
-        return xfi.concatOccurance(parse(getStreamToIndex()), "//*", "");
+    public ParsingResult parseResource(LiusConfig liusConfig,
+            Resource resource) {
+        try {
+            org.jdom.Document jdomDoc = this.parse(resource.getInputStream());
+            return xfi.getPopulatedLiusFields(jdomDoc,
+                    getConfigurationFields(liusConfig), resource);
+        } catch (IOException e) {
+            throw new IllegalArgumentException(e);
+        }
     }
 }

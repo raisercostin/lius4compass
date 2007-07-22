@@ -1,15 +1,22 @@
 package lius.index;
 
 import java.util.Collection;
+import org.springframework.core.io.Resource;
+
+import lius.config.LiusConfig;
 
 public interface Indexer {
     public int getType();
 
-    public boolean isConfigured();
+    public boolean isConfigured(LiusConfig liusConfig);
 
-    public Collection getConfigurationFields();
+    public Collection getConfigurationFields(LiusConfig liusConfig);
 
-    public String getContent();
+    public ParsingResult parseResource(LiusConfig liusConfig,
+            Resource resource);
 
-    public Collection getPopulatedLiusFields();
+    public ParsingResult parseObject(
+            LiusConfig liusConfig, Object resource);
+
+    public String getMimeType(Resource resource);
 }

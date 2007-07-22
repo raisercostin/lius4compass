@@ -18,6 +18,7 @@ package lius.lucene;
  */
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -43,6 +44,7 @@ import org.apache.lucene.index.IndexWriter;
 import org.apache.lucene.index.Term;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.springframework.core.io.FileSystemResource;
 
 /**
  * Classe permettant d'effectuer des actions relatives à Lucene. <br/><br/>
@@ -326,7 +328,7 @@ public class LuceneActions {
             indexer = IndexerFactory.getIndexer(f, lc);
             if (indexer != null) {
                 Document doc = populateLuceneDoc(indexer
-                        .getPopulatedLiusFields());
+                        .parseResource(lc, new FileSystemResource(f)).getCollection());
                 doc.add(new Field("filePath", f.getAbsolutePath(),
                         Field.Store.YES, Field.Index.UN_TOKENIZED));
                 iw.addDocument(doc);
@@ -421,7 +423,7 @@ public class LuceneActions {
                 logger.debug("Index file [" + fileToIndex.getAbsolutePath()
                         + "] ...");
             }
-            indexer.index(indexDir);
+            indexer.index(indexDir, new FileSystemResource(fileToIndex));
         } else {
             logger.warn("Couldn't find indexer for file ["
                     + fileToIndex.getAbsolutePath() + "]. No indexing.");

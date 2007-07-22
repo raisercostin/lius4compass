@@ -16,15 +16,19 @@ package lius.index.html;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import lius.config.LiusConfig;
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
 import lius.index.BaseIndexer;
+import lius.index.ParsingResult;
 
+import org.springframework.core.io.Resource;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -35,67 +39,63 @@ import org.w3c.tidy.Tidy;
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
 public class JTidyHtmlIndexer extends BaseIndexer {
-    private Node root = null;
-
     @Override
     public int getType() {
         return 1;
     }
 
     @Override
-    public boolean isConfigured() {
-        boolean ef = false;
-        if (getLiusConfig().getHtmlFields() != null)
-            return ef = true;
-        return ef;
+    public boolean isConfigured(LiusConfig liusConfig) {
+        return liusConfig.getHtmlFields() != null;
     }
 
     @Override
-    public Collection getConfigurationFields() {
-        return getLiusConfig().getHtmlFields();
+    public Collection getConfigurationFields(LiusConfig liusConfig) {
+        return liusConfig.getHtmlFields();
     }
 
     @Override
-    public String getContent() {
-        if (root == null)
-            root = getRoot(getStreamToIndex());
-        return getTextContent(root);
-    }
-
-    @Override
-    public Collection getPopulatedLiusFields() {
-        Collection coll = new ArrayList();
-        Iterator it = getLiusConfig().getHtmlFields().iterator();
-        while (it.hasNext()) {
-            Object field = it.next();
-            if (field instanceof LiusField) {
-                LiusField lf = (LiusField) field;
-                if (lf.getGet() != null) {
-                    if (lf.getGet().equalsIgnoreCase("content")) {
-                        String content = getContent();
-                        lf.setValue(content);
-                    } else {
-                        if (root != null)
-                            lf = getElementByName((Element) root, lf.getGet());
-                        else
-                            lf = getElementByName(
-                                    (Element) getRoot(getStreamToIndex()), lf
-                                            .getGet());
+    public ParsingResult parseResource(LiusConfig liusConfig,
+            Resource resource) {
+        try {
+            Node root = getRoot(resource);
+            Collection coll = new ArrayList();
+            Iterator it = liusConfig.getHtmlFields().iterator();
+            String content = getTextContent(root);
+            while (it.hasNext()) {
+                Object field = it.next();
+                if (field instanceof LiusField) {
+                    LiusField lf = (LiusField) field;
+                    if (lf.getGet() != null) {
+                        if (lf.getGet().equalsIgnoreCase(ParsingResult.CONTENT_FIELD)) {
+                            lf.setValue(content);
+                        } else {
+                            if (root != null)
+                                lf = getElementByName((Element) root, lf
+                                        .getGet());
+                            else
+                                lf = getElementByName(
+                                        (Element) getRoot(resource), lf
+                                                .getGet());
+                        }
+                        coll.add(lf);
                     }
-                    coll.add(lf);
+                } else {
+                    coll.add(field);
                 }
-            } else {
-                coll.add(field);
             }
+            return new ParsingResult(coll,content);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
-        return coll;
     }
 
-    private Node getRoot(InputStream is) {
+    private Node getRoot(Resource resource) throws IOException {
         Tidy tidy = new Tidy();
         tidy.setQuiet(true);
         tidy.setShowWarnings(false);
-        org.w3c.dom.Document doc = tidy.parseDOM(is, null);
+        org.w3c.dom.Document doc = tidy.parseDOM(resource.getInputStream(),
+                null);
         return doc.getDocumentElement();
     }
 
