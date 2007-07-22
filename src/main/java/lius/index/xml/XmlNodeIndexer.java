@@ -26,9 +26,7 @@ import java.util.Set;
 
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
-import lius.index.BaseIndexer;
 import lius.index.util.LiusUtils;
-import lius.lucene.LuceneActions;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Field;
@@ -113,9 +111,9 @@ public class XmlNodeIndexer extends BaseIndexer {
             }
             iw.close();
         } catch (JDOMException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } finally {
             getLuceneActions().unLock(indexDir);
         }
@@ -167,9 +165,9 @@ public class XmlNodeIndexer extends BaseIndexer {
             }
             iw.close();
         } catch (JDOMException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } finally {
             getLuceneActions().unLock(indexDir);
         }

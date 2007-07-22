@@ -23,6 +23,7 @@ import java.util.List;
 
 import lius.config.LiusConfig;
 import lius.config.LiusField;
+import lius.index.util.LiusUtils;
 import lius.lucene.LuceneActions;
 import lius.transaction.LiusTransactionManager;
 
@@ -78,12 +79,16 @@ public abstract class BaseIndexer implements Indexer, IndexService {
             transaction.start();
             transaction.commit();
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
             transaction.rollBack();
         }
     }
 
-    public synchronized void index(String indexDir) {
+    public void index(String indexDir) {
+        indexAndGetDocument(indexDir);
+    }
+
+    public synchronized Document indexAndGetDocument(String indexDir) {
         luceneDoc = luceneActions.populateLuceneDoc(getPopulatedLiusFields());
         if (docToIndexPath != null)
             luceneDoc.add(new Field("filePath", docToIndexPath,
@@ -91,8 +96,9 @@ public abstract class BaseIndexer implements Indexer, IndexService {
         try {
             luceneActions.index(luceneDoc, indexDir, lc);
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
+        return luceneDoc;
     }
 
     public synchronized void index(String indexDir, List LuceneCostumFields) {
@@ -107,7 +113,7 @@ public abstract class BaseIndexer implements Indexer, IndexService {
         try {
             luceneActions.index(luceneDoc, indexDir, lc);
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
     }
 
@@ -145,7 +151,7 @@ public abstract class BaseIndexer implements Indexer, IndexService {
         try {
             luceneActions.index(luceneDoc, indexDir, lc);
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
     }
 
@@ -166,7 +172,7 @@ public abstract class BaseIndexer implements Indexer, IndexService {
             transaction.start();
             transaction.commit();
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
             transaction.rollBack();
         }
     }

@@ -43,7 +43,7 @@ public class SubDirectoriesIndexingTest extends TestCase {
 
     @Override
     protected void setUp() {
-        indexDir = new File("target/indexDir1").getAbsolutePath();
+        indexDir = new File("target/indexDir3").getAbsolutePath();
         liusConfig = new ClassPathResource("liusConfig.xml");
         luceneActions = new LuceneActions();
         luceneActions.newIndex(indexDir);

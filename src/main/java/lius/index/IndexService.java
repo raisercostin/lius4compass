@@ -1,9 +1,10 @@
 package lius.index;
 
-import java.io.File;
 import java.io.InputStream;
 
 import lius.config.LiusConfig;
+
+import org.apache.lucene.document.Document;
 
 public interface IndexService extends Indexer{
     void index(String string);
@@ -21,4 +22,6 @@ public interface IndexService extends Indexer{
     void setMixedContentsObj(Object object);
 
     void setObjectToIndex(Object object);
+
+    Document indexAndGetDocument(String indexDir);
 }

@@ -24,8 +24,8 @@ import java.util.Iterator;
 import lius.config.LiusField;
 import lius.index.BaseIndexer;
 import lius.index.Indexer;
-import lius.index.BaseIndexer;
 import lius.index.parser.TexParser;
+import lius.index.util.LiusUtils;
 
 import org.apache.log4j.Logger;
 
@@ -93,7 +93,7 @@ public class TexIndexer extends BaseIndexer implements Indexer {
                     c.add(next);
             }
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
         return c;
     }
@@ -104,7 +104,7 @@ public class TexIndexer extends BaseIndexer implements Indexer {
         try {
             tp = new TexParser(getStreamToIndex());
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
         sb.append(tp.getDocumentclass() + " ");
         sb.append(tp.getTitle() + " ");

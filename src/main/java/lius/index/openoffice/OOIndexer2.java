@@ -24,7 +24,7 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import lius.index.BaseIndexer;
+import lius.index.util.LiusUtils;
 
 import org.jdom.Element;
 import org.jdom.JDOMException;
@@ -60,9 +60,9 @@ public class OOIndexer2 extends OOIndexer {
             xmlDocContent.getRootElement().addContent(meta.detach());
             xmlDocContent.getRootElement().addNamespaceDeclaration(NS_DC);
         } catch (JDOMException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
         return xmlDocContent;
     }
