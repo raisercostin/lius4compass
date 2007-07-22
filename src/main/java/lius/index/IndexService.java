@@ -23,5 +23,5 @@ public interface IndexService extends Indexer{
 
     void setObjectToIndex(Object object);
 
-    Document indexAndGetDocument(String indexDir);
+    Document getDocument();
 }

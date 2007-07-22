@@ -79,13 +79,21 @@ public abstract class BaseIndexer implements Indexer, IndexService {
             transaction.start();
             transaction.commit();
         } catch (IOException e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
             transaction.rollBack();
         }
     }
 
     public void index(String indexDir) {
         indexAndGetDocument(indexDir);
+    }
+
+    public synchronized Document getDocument() {
+        luceneDoc = luceneActions.populateLuceneDoc(getPopulatedLiusFields());
+        if (docToIndexPath != null)
+            luceneDoc.add(new Field("filePath", docToIndexPath,
+                    Field.Store.YES, Field.Index.UN_TOKENIZED));
+        return luceneDoc;
     }
 
     public synchronized Document indexAndGetDocument(String indexDir) {
@@ -96,7 +104,7 @@ public abstract class BaseIndexer implements Indexer, IndexService {
         try {
             luceneActions.index(luceneDoc, indexDir, lc);
         } catch (IOException e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
         }
         return luceneDoc;
     }
@@ -113,7 +121,7 @@ public abstract class BaseIndexer implements Indexer, IndexService {
         try {
             luceneActions.index(luceneDoc, indexDir, lc);
         } catch (IOException e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
         }
     }
 
@@ -151,7 +159,7 @@ public abstract class BaseIndexer implements Indexer, IndexService {
         try {
             luceneActions.index(luceneDoc, indexDir, lc);
         } catch (IOException e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
         }
     }
 
@@ -172,7 +180,7 @@ public abstract class BaseIndexer implements Indexer, IndexService {
             transaction.start();
             transaction.commit();
         } catch (IOException e) {
-            LiusUtils.doOnException( e);
+            LiusUtils.doOnException(e);
             transaction.rollBack();
         }
     }
