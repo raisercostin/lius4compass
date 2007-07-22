@@ -30,15 +30,10 @@ import org.springframework.core.io.UrlResource;
 /**
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
-public class LiusTestParsing extends TestCase {
-    // private String indexDir;
-    // private File classDir;
-    // private File toIndex;
-    // private LiusConfig lc;
-    // private IndexService indexer = null;
+public class LiusParsingTest extends TestCase {
     private ParsingService parsingService;
 
-    public LiusTestParsing(String name) {
+    public LiusParsingTest(String name) {
         super(name);
     }
 
