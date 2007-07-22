@@ -20,16 +20,14 @@ import java.io.File;
 import java.io.IOException;
 
 import lius.config.LiusConfig;
-import lius.index.BaseIndexer;
 import lius.index.IndexService;
-import lius.index.Indexer;
 import lius.index.IndexerFactory;
-import lius.index.mixedindexing.MixedIndexer;
 import lius.lucene.LuceneActions;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.FSDirectory;
+import org.springframework.core.io.FileSystemResource;
 
 /**
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
@@ -91,7 +89,7 @@ public class ThreadIndexer {
                         @Override
                         public void run() {
                             System.out.println(tmpsIndexPath[ct]);
-                            IndexService indexer = IndexerFactory.createMixedIndexer(lc,toIndexF);
+                            IndexService indexer = IndexerFactory.createMixedIndexer(toIndexF,lc);
                             indexer.index(tmpsIndexPath[ct]);
                             r++;
                         }

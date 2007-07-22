@@ -29,7 +29,7 @@ import java.io.OutputStreamWriter;
 import java.util.Collection;
 
 import lius.index.BaseIndexer;
-import lius.index.BaseIndexer;
+import lius.index.util.LiusUtils;
 import lius.index.xml.XmlFileIndexer;
 
 import org.apache.commons.io.FileUtils;
@@ -117,12 +117,12 @@ public class NekoHtmlIndexer extends BaseIndexer {
             org.w3c.dom.Document domDoc = parser.getDocument();
             jdomDoc = convert(domDoc);
         } catch (SAXException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } catch (IOException e) {
             e.printStackTrace();
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } catch (Exception e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } finally {
             try {
                 try {
@@ -135,7 +135,7 @@ public class NekoHtmlIndexer extends BaseIndexer {
                     }
                 }
             } catch (IOException ioe) {
-                logger.error(ioe);
+                LiusUtils.doOnException(ioe);
             }
         }
         return jdomDoc;

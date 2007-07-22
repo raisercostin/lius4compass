@@ -28,10 +28,10 @@ import java.util.Map;
 import lius.config.LiusConfig;
 import lius.config.LiusDocumentProperty;
 import lius.config.LiusField;
-import lius.index.BaseIndexer;
 import lius.index.IndexService;
 import lius.index.Indexer;
 import lius.index.IndexerFactory;
+import lius.index.util.LiusUtils;
 import lius.search.LiusHit;
 
 import org.apache.log4j.Logger;
@@ -163,7 +163,7 @@ public class LuceneActions {
                     // logger.debug(lf.getName() + " (type = " + lf.getType()
                     // + ") " + " : " + lf.getValue());
                     // } catch (ParseException ex) {
-                    // logger.error(ex.getMessage());
+                    // LiusUtils.doOnException(ex.getMessage());
                     // }
                 } else if (lf.getType().equalsIgnoreCase("UnIndexed")) {
                     field = new Field(lf.getName(), lf.getValue(),
@@ -221,14 +221,14 @@ public class LuceneActions {
         try {
             writer.addDocument(luceneDoc);
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
         if (lc.getOptimizeValue() != null) {
             if (lc.getOptimize()) {
                 try {
                     writer.optimize();
                 } catch (IOException e) {
-                    logger.error("Generic error.", e);
+                    LiusUtils.doOnException( e);
                 }
             }
         }
@@ -246,7 +246,7 @@ public class LuceneActions {
             setIndexWriterProps(writer, lc);
             save(doc, writer, lc);
         } catch (Exception e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } finally {
             unLock(indexDir);
             if (writer != null) {
@@ -264,7 +264,7 @@ public class LuceneActions {
             setIndexWriterProps(writer, lc);
             save(doc, writer, lc);
         } catch (Exception e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } finally {
             if (writer != null) {
                 writer.close();
@@ -285,7 +285,7 @@ public class LuceneActions {
             setIndexWriterProps(writer, lc);
             fileDirectoryIndexing(toIndex, indexDir, lc);
         } catch (Exception e) {
-            logger.error("Error trying to index.", e);
+            LiusUtils.doOnException("Error trying to index.", e);
         } finally {
             unLock(indexDir);
             if (writer != null) {
@@ -302,14 +302,14 @@ public class LuceneActions {
             iw.optimize();
             iw.close();
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } finally {
             if (iw != null) {
                 try {
                     unLock(indexDir);
                     iw.close();
                 } catch (IOException e1) {
-                    logger.error(e1.getMessage());
+                    LiusUtils.doOnException(e1);
                 }
             }
         }
@@ -351,14 +351,14 @@ public class LuceneActions {
             setIndexWriterProps(writer, lc);
             writer.addIndexes(directoriesToIndex);
         } catch (Exception e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         } finally {
             try {
                 if (writer != null) {
                     writer.close();
                 }
             } catch (IOException e) {
-                logger.error("Generic error.", e);
+                LiusUtils.doOnException( e);
             }
         }
     }
@@ -374,7 +374,7 @@ public class LuceneActions {
             writer = new IndexWriter(fsDir, analyzer, createIndex);
             setIndexWriterProps(writer, lc);
         } catch (Exception e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
             unLock(indexDir);
             if (writer != null) {
                 writer.close();
@@ -441,7 +441,7 @@ public class LuceneActions {
                 IndexReader.unlock(directory);
             }
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
     }
 
@@ -455,7 +455,7 @@ public class LuceneActions {
             }
             ir.close();
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
     }
 
@@ -490,7 +490,7 @@ public class LuceneActions {
             }
             ir.close();
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
         return documentsList;
     }
@@ -502,7 +502,7 @@ public class LuceneActions {
             ir.undeleteAll();
             ir.close();
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
     }
 
@@ -510,7 +510,7 @@ public class LuceneActions {
         try {
             Directory directory = FSDirectory.getDirectory(indexDir, true);
         } catch (IOException ex) {
-            logger.error(ex.getMessage());
+            LiusUtils.doOnException(ex);
         }
     }
 
@@ -547,7 +547,7 @@ public class LuceneActions {
             indexReader.close();
             logger.debug("Document supprimé");
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
         return nbDelete;
     }
@@ -567,7 +567,7 @@ public class LuceneActions {
             indexReader.close();
             logger.info("Document supprimé");
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
         return nbDelete;
     }
@@ -580,7 +580,7 @@ public class LuceneActions {
             indexReader.close();
             logger.info("Document supprimé");
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
     }
 

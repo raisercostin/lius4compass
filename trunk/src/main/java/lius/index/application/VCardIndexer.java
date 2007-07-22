@@ -26,8 +26,8 @@ import lius.config.LiusField;
 import lius.config.LiusProxyField;
 import lius.config.LiusValueProxyField;
 import lius.index.BaseIndexer;
-import lius.index.BaseIndexer;
 import lius.index.parser.VCardParser;
+import lius.index.util.LiusUtils;
 import lius.index.util.VCard;
 
 import org.apache.log4j.Logger;
@@ -97,7 +97,7 @@ public class VCardIndexer extends BaseIndexer {
                     c.add(next);
             }
         } catch (IOException e) {
-            logger.error("Generic error.", e);
+            LiusUtils.doOnException( e);
         }
         return c;
     }

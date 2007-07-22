@@ -27,7 +27,6 @@ import junit.framework.TestCase;
 import lius.config.LiusConfig;
 import lius.config.LiusConfigBuilder;
 import lius.index.IndexService;
-import lius.index.Indexer;
 import lius.index.IndexerFactory;
 import lius.index.javaobject.BeanIndexer;
 import lius.index.mixedindexing.MixedIndexer;
@@ -35,7 +34,6 @@ import lius.index.xml.XmlNodeIndexer;
 import lius.test.beans.Personne;
 
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 
 /**
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
