@@ -83,7 +83,7 @@ public class XmlNodeIndexer extends BaseIndexer {
     }
 
     public org.apache.lucene.document.Document storeNodeInLuceneDocument(
-            Object xmlDoc, Collection liusFields, Resource resource) {
+            Element xmlDoc, Collection liusFields, Resource resource) {
         ParsingResult resColl = xfi.getPopulatedLiusFields(xmlDoc, liusFields,
                 resource);
         org.apache.lucene.document.Document luceneDoc = getLuceneActions()
@@ -185,9 +185,5 @@ public class XmlNodeIndexer extends BaseIndexer {
         } finally {
             getLuceneActions().unLock(indexDir);
         }
-    }
-
-    private String getContent(Resource resource) throws IOException {
-        return xfi.getContent(resource);
     }
 }

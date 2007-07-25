@@ -16,6 +16,7 @@ package lius.index.zip;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -23,12 +24,15 @@ import java.util.List;
 
 import lius.config.LiusConfig;
 import lius.index.BaseIndexer;
+import lius.index.IndexService;
 import lius.index.Indexer;
 import lius.index.IndexerFactory;
 import lius.index.MimeTypeUtils;
 import lius.index.ParsingResult;
+import lius.index.util.LiusUtils;
 
 import org.apache.log4j.Logger;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 /**
@@ -56,17 +60,16 @@ public class ZIPIndexer extends BaseIndexer {
     }
 
     @Override
-    public ParsingResult parseResource(LiusConfig liusConfig,
-            Resource resource) {
+    public ParsingResult parseResource(LiusConfig liusConfig, Resource resource) {
         try {
             ParsingResult resColl = new ParsingResult("");
-            Indexer indexer = null;
-            List indexers = IndexerFactory.getIndexersFromZipResource(resource,
-                    liusConfig);
-            for (int i = 0; i < indexers.size(); i++) {
-                indexer = (Indexer) indexers.get(i);
-                resColl.addAll(indexer.parseResource(liusConfig,
-                        resource));
+            List files = LiusUtils.unzip(resource.getInputStream());
+            for (int i = 0; i < files.size(); i++) {
+                FileSystemResource fileSystemResource = new FileSystemResource(
+                        (File) files.get(i));
+                IndexService indexer = IndexerFactory.getIndexer(
+                        fileSystemResource, liusConfig);
+                resColl.addAll(indexer.getLiusDocument(fileSystemResource));
             }
             resColl.reinit();
             return resColl;
