@@ -253,6 +253,11 @@
 			<artifactId>spring-core</artifactId>
 			<version>2.0.6</version>
 		</dependency>
+	    <dependency>
+	      <groupId>org.compass</groupId>
+	      <artifactId>compass</artifactId>
+	      <version>1.2M2</version>
+	    </dependency>
 	</dependencies>
 	<reporting>
 		<plugins>

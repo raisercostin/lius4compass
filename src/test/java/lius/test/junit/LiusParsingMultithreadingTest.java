@@ -38,7 +38,7 @@ public class LiusParsingMultithreadingTest extends TestCase {
                     Document document = parsingService
                             .parse(new ClassPathResource("testMixedIndexing"));
                     assertNotNull(document);
-                    assertEquals(8199, document.toString().length());
+                    assertEquals(15778, document.toString().length());
                 }
             });
         }
@@ -61,7 +61,7 @@ public class LiusParsingMultithreadingTest extends TestCase {
                             .parse(new ClassPathResource(
                                     "testFiles/testWORD.doc"));
                     assertNotNull(document);
-                    assertEquals(186, document.toString().length());
+                    assertEquals(281, document.toString().length());
                 }
             });
         }

@@ -77,6 +77,11 @@ public abstract class BaseIndexer implements Indexer, IndexService {
     public void index(String indexDir, Resource resource) {
         indexAndGetDocument(indexDir, resource);
     }
+    
+    public void indexBean(String indexDir, Object object)
+    {
+        indexAndGetDocument2(indexDir, object);
+    }
 
     public Document getDocument(Resource resource) {
         Document luceneDoc = luceneActions
@@ -98,6 +103,18 @@ public abstract class BaseIndexer implements Indexer, IndexService {
             Resource resource) {
         Document luceneDoc = luceneActions
                 .populateLuceneDoc(parseResourceInternal(resource));
+        try {
+            luceneActions.index(luceneDoc, indexDir, liusConfig);
+        } catch (IOException e) {
+            LiusUtils.doOnException(e);
+        }
+        return luceneDoc;
+    }
+
+    public synchronized Document indexAndGetDocument2(String indexDir,
+            Object bean) {
+        Document luceneDoc = luceneActions
+                .populateLuceneDoc(parseObjectInternal(bean));
         try {
             luceneActions.index(luceneDoc, indexDir, liusConfig);
         } catch (IOException e) {

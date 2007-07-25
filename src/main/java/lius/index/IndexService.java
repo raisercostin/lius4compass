@@ -27,5 +27,8 @@ public interface IndexService extends Indexer {
     @Deprecated
     void index(String string, Resource resource);
 
+    @Deprecated
+    void indexBean(String string, Object object);
+
     void setUp(LiusConfig lc);
 }
