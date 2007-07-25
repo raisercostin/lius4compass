@@ -122,7 +122,6 @@ public class NekoHtmlIndexer extends BaseIndexer {
         } catch (SAXException e) {
             LiusUtils.doOnException(e);
         } catch (IOException e) {
-            e.printStackTrace();
             LiusUtils.doOnException(e);
         } catch (Exception e) {
             LiusUtils.doOnException(e);

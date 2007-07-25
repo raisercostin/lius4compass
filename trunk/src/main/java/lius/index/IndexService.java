@@ -5,6 +5,11 @@ import lius.config.LiusConfig;
 import org.apache.lucene.document.Document;
 import org.springframework.core.io.Resource;
 
+/**
+ * Each indexService should be stateless.
+ * @author raisercostin
+ *
+ */
 public interface IndexService extends Indexer {
     /**
      * Gets the lucene document from resource.

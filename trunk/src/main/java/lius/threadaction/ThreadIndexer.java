@@ -22,6 +22,7 @@ import java.io.IOException;
 import lius.config.LiusConfig;
 import lius.index.IndexService;
 import lius.index.IndexerFactory;
+import lius.index.util.LiusUtils;
 import lius.lucene.LuceneActions;
 
 import org.apache.log4j.Logger;
@@ -98,8 +99,7 @@ public class ThreadIndexer {
                     try {
                         Thread.sleep(10);
                     } catch (InterruptedException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                        LiusUtils.doOnException(e);
                     }
                     ct--;
                 }
@@ -123,7 +123,7 @@ public class ThreadIndexer {
                 indexDirs[i] = FSDirectory.getDirectory(indexs[i]
                         .getAbsolutePath(), false);
             } catch (IOException e) {
-                e.printStackTrace();
+                LiusUtils.doOnException(e);
             }
         }
         return indexDirs;

@@ -23,6 +23,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+import lius.index.util.LiusUtils;
+
 import org.springframework.core.io.Resource;
 
 /**
@@ -141,7 +143,7 @@ public class TexParser {
                 System.out.println(tp.getTitle());
             }
         } catch (IOException e) {
-            e.printStackTrace(System.err);
+            LiusUtils.doOnException(e);
         }
     }
 }

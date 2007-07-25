@@ -29,6 +29,28 @@ public class LiusParsingMultithreadingTest extends TestCase {
                 "liusConfig.xml"));
     }
 
+    public void testOnOneThread() throws InterruptedException {
+        long start = System.currentTimeMillis();
+        Thread[] threads = new Thread[1];
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(new Runnable() {
+                public void run() {
+                    Document document = parsingService
+                            .parse(new ClassPathResource("testMixedIndexing"));
+                    assertNotNull(document);
+                    assertEquals(15778, document.toString().length());
+                }
+            });
+        }
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].start();
+        }
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].join();
+        }
+        assertDurationSmallerThan("oneThreadMixed", 2000, start, 30);
+    }
+
     public void testOnMultipleThreads() throws InterruptedException {
         long start = System.currentTimeMillis();
         Thread[] threads = new Thread[10];
@@ -48,7 +70,30 @@ public class LiusParsingMultithreadingTest extends TestCase {
         for (int i = 0; i < threads.length; i++) {
             threads[i].join();
         }
-        assertDurationSmallerThan(5000, start, 30);
+        assertDurationSmallerThan("multipleThreadsMixed", 5000, start, 30);
+    }
+
+    public void testOnOneThreadsWord() throws InterruptedException {
+        long start = System.currentTimeMillis();
+        Thread[] threads = new Thread[1];
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(new Runnable() {
+                public void run() {
+                    Document document = parsingService
+                            .parse(new ClassPathResource(
+                                    "testFiles/testWORD.doc"));
+                    assertNotNull(document);
+                    assertEquals(281, document.toString().length());
+                }
+            });
+        }
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].start();
+        }
+        for (int i = 0; i < threads.length; i++) {
+            threads[i].join();
+        }
+        assertDurationSmallerThan("oneThreadWord", 200, start, 30);
     }
 
     public void testOnMultipleThreadsWord() throws InterruptedException {
@@ -71,18 +116,18 @@ public class LiusParsingMultithreadingTest extends TestCase {
         for (int i = 0; i < threads.length; i++) {
             threads[i].join();
         }
-        assertDurationSmallerThan(297, start, 30);
+        assertDurationSmallerThan("multipleThreadsWord", 100, start, 30);
     }
 
-    private void assertDurationSmallerThan(long expectedDuration, long start,
-            long deltaPercent) {
+    private void assertDurationSmallerThan(String message,
+            long expectedDuration, long start, long deltaPercent) {
         long actualDuration = System.currentTimeMillis() - start;
         if (logger.isInfoEnabled()) {
-            logger.info("expectedTime=" + expectedDuration + ", actualTime="
-                    + actualDuration);
+            logger.info(message + ": expectedTime=" + expectedDuration
+                    + ", actualTime=" + actualDuration);
         }
         if (actualDuration * 100 > expectedDuration * (100 + deltaPercent)) {
-            fail("Actual duration [" + actualDuration
+            fail(message + ": Actual duration [" + actualDuration
                     + "] is bigger than expected duration[" + expectedDuration
                     + " + " + deltaPercent + "%].");
         }
