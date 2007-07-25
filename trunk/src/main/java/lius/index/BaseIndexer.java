@@ -42,7 +42,6 @@ public abstract class BaseIndexer implements Indexer, IndexService {
     public final static int INDEXER_CONFIG_FIELDS_COL = 1;
     public final static int INDEXER_CONFIG_FIELDS_MAP = 2;
     public static Logger logger = Logger.getLogger(BaseIndexer.class);
-
     protected LuceneActions luceneActions = new LuceneActions();
     protected LiusConfig liusConfig = null;
     private Directory ramDir = null;
@@ -83,6 +82,10 @@ public abstract class BaseIndexer implements Indexer, IndexService {
         Document luceneDoc = luceneActions
                 .populateLuceneDoc(parseResourceInternal(resource));
         return luceneDoc;
+    }
+
+    public ParsingResult getLiusDocument(Resource resource) {
+        return parseResourceInternal2(resource);
     }
 
     public Document getDocumentFromObject(Object object) {
@@ -200,9 +203,13 @@ public abstract class BaseIndexer implements Indexer, IndexService {
     }
 
     private Collection parseResourceInternal(Resource resource) {
+        return parseResourceInternal2(resource).getCollection();
+    }
+
+    private ParsingResult parseResourceInternal2(Resource resource) {
         ParsingResult parsingResult = parseResource(liusConfig, resource);
         parsingResult.setResource(resource);
         parsingResult.reinit();
-        return parsingResult.getCollection();
+        return parsingResult;
     }
 }

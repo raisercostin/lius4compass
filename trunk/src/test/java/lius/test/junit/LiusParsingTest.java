@@ -103,6 +103,16 @@ public class LiusParsingTest extends TestCase {
         assertEquals(163, document.get("content").length());
     }
 
+    public void testMp3FactoryIndexing() {
+        Document document = parsingService.parse(new ClassPathResource(
+                "testFiles/testMp3.mp3"));
+        assertNotNull(document);
+        assertNotNull(document.get("content"));
+        assertNotNull(document.get("fullPath"));
+        assertEquals(922, document.toString().length());
+        assertEquals(0, document.get("content").length());
+    }
+
     public void _testOpenOfficeFactoryIndexingBad() {
         Document document = parsingService.parse(new ClassPathResource(
                 "testFiles/testOO.sxw"));
@@ -119,8 +129,8 @@ public class LiusParsingTest extends TestCase {
         assertNotNull(document);
         assertNotNull(document.get("content"));
         assertNotNull(document.get("fullPath"));
-        assertEquals(189, document.toString().length());
-        assertEquals(100, document.get("content").length());
+        assertEquals(387, document.toString().length());
+        assertEquals(129, document.get("content").length());
     }
 
     public void testOpenOffice2FactoryIndexing() {
@@ -129,8 +139,8 @@ public class LiusParsingTest extends TestCase {
         assertNotNull(document);
         assertNotNull(document.get("content"));
         assertNotNull(document.get("fullPath"));
-        assertEquals(184, document.toString().length());
-        assertEquals(100, document.get("content").length());
+        assertEquals(413, document.toString().length());
+        assertEquals(160, document.get("content").length());
     }
 
     public void testZipFactoryIndexing() {
@@ -139,8 +149,8 @@ public class LiusParsingTest extends TestCase {
         assertNotNull(document);
         assertNotNull(document.get("content"));
         assertNotNull(document.get("fullPath"));
-        assertEquals(8090, document.toString().length());
-        assertEquals(100, document.get("content").length());
+        assertEquals(15638, document.toString().length());
+        assertEquals(200, document.get("content").length());
     }
 
     public void testTextFactoryIndexing() {

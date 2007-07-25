@@ -75,13 +75,8 @@ public class XmlFileIndexer extends BaseIndexer {
         return liusConfig.getXmlFileFields();
     }
 
-    public String getContent(Resource resource) {
-        try {
-            return concatOccurance(LiusUtils.parse(resource.getInputStream()),
-                    "//*", "");
-        } catch (IOException e) {
-            throw new IllegalArgumentException(e);
-        }
+    private String getContent(Resource resource, Object document) {
+        return concatOccurance(document, "//*", "");
     }
 
     /**
@@ -149,11 +144,11 @@ public class XmlFileIndexer extends BaseIndexer {
      * text, title, etc.
      */
     @Override
-    public ParsingResult parseResource(LiusConfig liusConfig,
-            Resource resource) {
+    public ParsingResult parseResource(LiusConfig liusConfig, Resource resource) {
         try {
             Document xmlDoc = LiusUtils.parse(resource.getInputStream());
-            return getPopulatedLiusFields(xmlDoc, liusConfig.getXmlFileFields(),resource);
+            return getPopulatedLiusFields(xmlDoc,
+                    liusConfig.getXmlFileFields(), resource);
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
@@ -165,7 +160,7 @@ public class XmlFileIndexer extends BaseIndexer {
         Map hm = null;
         boolean nsTrouve = false;
         boolean isMap = false;
-        ParsingResult resColl = new ParsingResult(getContent(resource));
+        ParsingResult resColl = new ParsingResult(getContent(resource, xml));
         if (xml instanceof org.jdom.Document) {
             documentNs = getAllDocumentNs((org.jdom.Document) xml);
         }
