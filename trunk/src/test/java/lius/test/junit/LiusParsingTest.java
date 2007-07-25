@@ -163,12 +163,6 @@ public class LiusParsingTest extends TestCase {
         assertEquals(25, document.get("content").length());
     }
 
-    /*
-     * public void testMp3FactoryIndexing() { toIndex = new
-     * File(classDir.getParent() + File.separator + "ExempleFiles" +
-     * File.separator + "testFiles" + File.separator + "testMP3.mp3"); indexer =
-     * IndexerFactory.getIndexer(toIndex, lc); indexer.index(indexDir); }
-     */
     public void testHtmlFactoryIndexing() {
         Document document = parsingService.parse(new ClassPathResource(
                 "testFiles/testHTML.html"));

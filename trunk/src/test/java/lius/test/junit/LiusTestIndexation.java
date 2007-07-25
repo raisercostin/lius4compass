@@ -34,6 +34,7 @@ import lius.test.beans.Personne;
 
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 
 /**
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
@@ -67,7 +68,7 @@ public class LiusTestIndexation extends TestCase {
         String string = "testWORD.doc";
         toIndex = new ClassPathResource("testFiles/" + string);
         indexer = IndexerFactory.getIndexer(toIndex, lc);
-        indexer.index(indexDir,toIndex);
+        indexer.index(indexDir, toIndex);
     }
 
     public void testRtfFactoryIndexing() {
@@ -150,17 +151,17 @@ public class LiusTestIndexation extends TestCase {
         toIndex = new ClassPathResource("testMixedIndexing");
         indexer = new MixedIndexer();
         indexer.setUp(lc);
-        //indexer.setMixedContentsObj(toIndex);
+        // indexer.setMixedContentsObj(toIndex);
         indexer.index(indexDir, toIndex);
     }
 
     public void testUrlIndexing() throws MalformedURLException {
         URL url = new URL("http://www.doculibre.com/index.html");
         indexer = IndexerFactory.getIndexer(url, lc);
-        indexer.index(indexDir, toIndex);
+        indexer.index(indexDir, new UrlResource(url));
     }
 
-    public void testNodeIndexing(){
+    public void testNodeIndexing() {
         String string = "testXMLNode.xml";
         toIndex = new ClassPathResource("testFiles/" + string);
         indexer = new XmlNodeIndexer();
@@ -175,7 +176,7 @@ public class LiusTestIndexation extends TestCase {
         personne.setAdresse("Quebec Canada");
         indexer = new BeanIndexer();
         indexer.setUp(lc);
-        //indexer.setObjectToIndex(personne);
-        indexer.index(indexDir, toIndex);
+        // indexer.setObjectToIndex(personne);
+        indexer.indexBean(indexDir, personne);
     }
 }
