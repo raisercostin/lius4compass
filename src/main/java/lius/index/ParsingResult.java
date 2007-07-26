@@ -102,7 +102,7 @@ public class ParsingResult {
     public void setResource(Resource resource) {
         this.resource = resource;
         try {
-            addField("fullPath", resource.getURL().toString(), "Text");
+            addField("fullPath", resource.getURL().toString(), "keyword");
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
