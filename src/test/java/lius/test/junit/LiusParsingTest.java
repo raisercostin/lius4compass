@@ -48,9 +48,10 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testPDF.pdf"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertNotNull(document.get("fullPath"));
-        assertEquals(14606, document.toString().length());
+        assertEquals("s une suite de projets numériques comme le projet Érudit, la",document.get("content").substring(200,260));
         assertEquals(7189, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
+        assertEquals(14596, document.toString().length());
     }
 
     public void testWordFactoryIndexing() {
@@ -58,9 +59,10 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testWORD.doc"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertNotNull(document.get("fullPath"));
-        assertEquals(281, document.toString().length());
+        assertEquals("Test d’indexation Word\r\n\r\n", document.get("content"));
         assertEquals(26, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
+        assertEquals(271, document.toString().length());
     }
 
     public void testRtfFactoryIndexing() {
@@ -68,6 +70,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testRTF.rtf"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(276, document.toString().length());
         assertEquals(24, document.get("content").length());
@@ -78,6 +82,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testXML.xml"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(3913, document.toString().length());
         assertEquals(1878, document.get("content").length());
@@ -88,6 +94,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testEXCEL.xls"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(284, document.toString().length());
         assertEquals(27, document.get("content").length());
@@ -98,6 +106,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testPPT.ppt"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(554, document.toString().length());
         assertEquals(163, document.get("content").length());
@@ -108,6 +118,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testMp3.mp3"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(922, document.toString().length());
         assertEquals(0, document.get("content").length());
@@ -118,6 +130,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testOO.sxw"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(100, document.toString().length());
         assertEquals(100, document.get("content").length());
@@ -128,6 +142,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testOO1.sxw"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(387, document.toString().length());
         assertEquals(129, document.get("content").length());
@@ -138,6 +154,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testOO2.odt"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(413, document.toString().length());
         assertEquals(160, document.get("content").length());
@@ -148,6 +166,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testZIP.zip"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(15638, document.toString().length());
         assertEquals(200, document.get("content").length());
@@ -158,6 +178,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testTXT.txt"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(278, document.toString().length());
         assertEquals(25, document.get("content").length());
@@ -168,6 +190,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testHTML.html"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(362, document.toString().length());
         assertEquals(66, document.get("content").length());
@@ -178,6 +202,8 @@ public class LiusParsingTest extends TestCase {
                 "testMixedIndexing"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(15778, document.toString().length());
         assertEquals(7389, document.get("content").length());
@@ -188,6 +214,8 @@ public class LiusParsingTest extends TestCase {
                 "http://www.doculibre.com/index.html"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(3634, document.toString().length());
         assertEquals(1722, document.get("content").length());
@@ -198,6 +226,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testXMLNode.xml"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
         assertEquals(618, document.toString().length());
         assertEquals(183, document.get("content").length());
@@ -211,6 +241,8 @@ public class LiusParsingTest extends TestCase {
         Document document = parsingService.parse(personne);
         assertNotNull(document);
         assertNotNull(document.get("content"));
+        assertEquals("",document.get("content").substring(0,60));
+        assertEquals(7189, document.get("content").length());
         assertNull(document.get("fullPath"));
         assertEquals(253, document.toString().length());
         assertEquals(30, document.get("content").length());
