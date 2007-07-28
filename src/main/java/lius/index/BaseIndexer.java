@@ -33,8 +33,6 @@ import org.apache.lucene.store.Directory;
 import org.apache.lucene.store.RAMDirectory;
 import org.springframework.core.io.Resource;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
 /**
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
@@ -202,11 +200,11 @@ public abstract class BaseIndexer implements Indexer, IndexService {
     public abstract boolean isConfigured(LiusConfig liusConfig);
 
     public ParsingResult parseResource(LiusConfig liusConfig, Resource resource) {
-        throw new NotImplementedException();
+        throw new IllegalStateException();
     }
 
     public ParsingResult parseObject(LiusConfig liusConfig, Object mixedContent) {
-        throw new NotImplementedException();
+        throw new IllegalStateException();
     }
 
     public String getMimeType(Resource resource) {

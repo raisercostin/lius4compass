@@ -17,13 +17,16 @@
 package lius.test.junit;
 
 import java.io.File;
+import java.util.List;
 import java.util.StringTokenizer;
 
 import junit.framework.TestCase;
 import lius.config.LiusConfig;
 import lius.config.LiusConfigBuilder;
+import lius.config.LiusField;
 import lius.index.util.LiusUtils;
 import lius.lucene.LuceneActions;
+import lius.search.LiusHit;
 import lius.search.LiusHitList;
 import lius.search.SearchIndex;
 
@@ -34,7 +37,6 @@ import org.springframework.core.io.ClassPathResource;
  */
 public class LiusTestSearch extends TestCase {
     private static String indexDir;
-    private String indexDir1;
     private LiusConfig liusConfig;
     private SearchIndex searchIndex;
 
@@ -53,19 +55,40 @@ public class LiusTestSearch extends TestCase {
                 .getProperty("java.class.path"), File.pathSeparator);
         File classDir = new File(st.nextToken());
         indexDir = classDir.getParent() + sep + "indexDir";
-        indexDir1 = classDir.getParent() + sep + "indexDir1";
     }
 
     public void testSearchIndexPrinLs() {
         LiusHitList res = searchIndex.search("reda", indexDir, liusConfig);
-        System.out.println(res.size());
-        LiusUtils.printResultsFormLiusHitsList(res);
+        assertEquals(5, res.size());
+        assertEquals(0.5,res.get(0).getScore(),1e-1);
+        assertEquals(12,res.get(0).getDocId());
+        assertEquals(1,res.get(0).getLiusFields().size());
+        assertEquals("creator",res.get(0).getLiusFields().get(0).getLabel());
+        assertEquals("<span class=\"liusHit\">reda</span> benjelloun",res.get(0).getLiusFields().get(0).getValue());
+
+        assertEquals(0.5,res.get(1).getScore(),1e-1);
+        assertEquals(28,res.get(1).getDocId());
+        assertEquals(1,res.get(1).getLiusFields().size());
+        assertEquals("creator",res.get(1).getLiusFields().get(0).getLabel());
+        assertEquals("<span class=\"liusHit\">reda</span> benjelloun",res.get(1).getLiusFields().get(0).getValue());
+
+        assertEquals(0.5,res.get(2).getScore(),1e-1);
+        assertEquals(44,res.get(2).getDocId());
+        assertEquals(1,res.get(2).getLiusFields().size());
+        assertEquals("creator",res.get(2).getLiusFields().get(0).getLabel());
+        assertEquals("<span class=\"liusHit\">reda</span> benjelloun",res.get(2).getLiusFields().get(0).getValue());
+
+        assertEquals(0.5,res.get(3).getScore(),1e-1);
+        assertEquals(60,res.get(3).getDocId());
+        assertEquals(1,res.get(3).getLiusFields().size());
+        assertEquals("creator",res.get(3).getLiusFields().get(0).getLabel());
+        assertEquals("<span class=\"liusHit\">reda</span> benjelloun",res.get(3).getLiusFields().get(0).getValue());
     }
 
     public void testMultiIndexSearchPrinLs() {
-        String[] indexs = { indexDir, indexDir1 };
+        String[] indexs = { indexDir };
         LiusHitList res = searchIndex.multiIndexSearch("la*", indexs,
                 liusConfig);
-        LiusUtils.printResultsFormLiusHitsList(res);
+        assertEquals(15, res.size());
     }
 }
