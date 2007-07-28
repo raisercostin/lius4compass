@@ -38,15 +38,12 @@ public class LiusParsingMultithreadingTest extends TestCase {
                     Document document = parsingService
                             .parse(new ClassPathResource("testMixedIndexing"));
                     assertNotNull(document);
-                    assertEquals(15778, document.toString().length());
+                    assertEquals(7389, document.get("content").length());
                 }
             });
         }
         for (int i = 0; i < threads.length; i++) {
-            threads[i].start();
-        }
-        for (int i = 0; i < threads.length; i++) {
-            threads[i].join();
+            threads[i].run();
         }
         assertDurationSmallerThan("oneThreadMixed", 2000, start, 30);
     }
@@ -60,7 +57,7 @@ public class LiusParsingMultithreadingTest extends TestCase {
                     Document document = parsingService
                             .parse(new ClassPathResource("testMixedIndexing"));
                     assertNotNull(document);
-                    assertEquals(15778, document.toString().length());
+                    assertEquals(7389, document.get("content").length());
                 }
             });
         }
@@ -83,15 +80,12 @@ public class LiusParsingMultithreadingTest extends TestCase {
                             .parse(new ClassPathResource(
                                     "testFiles/testWORD.doc"));
                     assertNotNull(document);
-                    assertEquals(281, document.toString().length());
+                    assertEquals(26, document.get("content").length());
                 }
             });
         }
         for (int i = 0; i < threads.length; i++) {
-            threads[i].start();
-        }
-        for (int i = 0; i < threads.length; i++) {
-            threads[i].join();
+            threads[i].run();
         }
         assertDurationSmallerThan("oneThreadWord", 200, start, 30);
     }
@@ -106,7 +100,7 @@ public class LiusParsingMultithreadingTest extends TestCase {
                             .parse(new ClassPathResource(
                                     "testFiles/testWORD.doc"));
                     assertNotNull(document);
-                    assertEquals(281, document.toString().length());
+                    assertEquals(26, document.get("content").length());
                 }
             });
         }

@@ -46,7 +46,7 @@ import org.apache.lucene.store.Directory;
 /**
  * @author Vincent Dussault (vincent.dussault@doculibre.com)
  */
-public class LiusHitList extends AbstractList implements Serializable {
+public class LiusHitList extends AbstractList<LiusHit> implements Serializable {
     private Hits luceneHits;
     private LiusConfig liusConfig;
     private Query luceneQuery;
@@ -71,7 +71,7 @@ public class LiusHitList extends AbstractList implements Serializable {
     }
 
     @Override
-    public Object get(int index) {
+    public LiusHit get(int index) {
         try {
             return buildLiusHit(index);
         } catch (IOException e) {

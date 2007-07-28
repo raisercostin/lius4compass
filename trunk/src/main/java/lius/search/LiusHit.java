@@ -19,20 +19,22 @@ package lius.search;
 import java.util.List;
 import java.util.Map;
 
+import lius.config.LiusField;
+
 /**
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
 public class LiusHit {
     private double score;
-    private List liusFields;
+    private List<LiusField> liusFields;
     private Map liusFieldsMap;
     private int docId;
 
-    public List getLiusFields() {
+    public List<LiusField> getLiusFields() {
         return liusFields;
     }
 
-    public void setLiusFields(List liusFields) {
+    public void setLiusFields(List<LiusField> liusFields) {
         this.liusFields = liusFields;
     }
 

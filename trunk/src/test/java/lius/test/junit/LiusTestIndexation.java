@@ -1,5 +1,7 @@
 package lius.test.junit;
 
+import org.apache.log4j.Logger;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -32,6 +34,7 @@ import lius.index.mixedindexing.MixedIndexer;
 import lius.index.xml.XmlNodeIndexer;
 import lius.test.beans.Personne;
 
+import org.apache.lucene.document.Document;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -40,6 +43,11 @@ import org.springframework.core.io.UrlResource;
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
 public class LiusTestIndexation extends TestCase {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = Logger
+            .getLogger(LiusTestIndexation.class);
     private String indexDir;
     // private File classDir;
     private Resource toIndex;
@@ -155,10 +163,16 @@ public class LiusTestIndexation extends TestCase {
         indexer.index(indexDir, toIndex);
     }
 
-    public void testUrlIndexing() throws MalformedURLException {
-        URL url = new URL("http://www.doculibre.com/index.html");
-        indexer = IndexerFactory.getIndexer(url, lc);
-        indexer.index(indexDir, new UrlResource(url));
+    public void testUrlIndexing() throws IOException {
+        UrlResource urlResource = new UrlResource(
+                "http://www.doculibre.com/index.html");
+        if (urlResource.exists()) {
+            indexer = IndexerFactory.getIndexer(urlResource.getURL(), lc);
+            indexer.index(indexDir, urlResource);
+        } else {
+            logger
+                    .warn("The test testUrlIndexing wasn't runned because couldn't be found.");
+        }
     }
 
     public void testNodeIndexing() {

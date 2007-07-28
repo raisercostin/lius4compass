@@ -1,5 +1,7 @@
 package lius.test.junit;
 
+import org.apache.log4j.Logger;
+
 /*
  * Licensed to the Apache Software Foundation (ASF) under one or more
  * contributor license agreements.  See the NOTICE file distributed with
@@ -31,6 +33,11 @@ import org.springframework.core.io.UrlResource;
  * @author Rida Benjelloun (ridabenjelloun@gmail.com)
  */
 public class LiusParsingTest extends TestCase {
+    /**
+     * Logger for this class
+     */
+    private static final Logger logger = Logger
+            .getLogger(LiusParsingTest.class);
     private ParsingService parsingService;
 
     public LiusParsingTest(String name) {
@@ -104,7 +111,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testPPT.ppt"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("Cliquez pour modifier le style du titre", document.get("content").substring(3, 42));
+        assertEquals("Cliquez pour modifier le style du titre", document.get(
+                "content").substring(3, 42));
         assertEquals(163, document.get("content").length());
         assertNotNull(document.get("fullPath"));
     }
@@ -134,7 +142,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testOO1.sxw"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("Test d'indexation d'OpenOffice  OpenOffice.org 1.1.4 (Win32)", document.get("content").substring(0, 60));
+        assertEquals(
+                "Test d'indexation d'OpenOffice  OpenOffice.org 1.1.4 (Win32)",
+                document.get("content").substring(0, 60));
         assertEquals(129, document.get("content").length());
         assertNotNull(document.get("fullPath"));
     }
@@ -144,7 +154,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testOO2.odt"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("Test OpenOffice version 2  OpenOffice.org/2.0$Win32 OpenOffi", document.get("content").substring(0, 60));
+        assertEquals(
+                "Test OpenOffice version 2  OpenOffice.org/2.0$Win32 OpenOffi",
+                document.get("content").substring(0, 60));
         assertEquals(160, document.get("content").length());
         assertNotNull(document.get("fullPath"));
     }
@@ -154,7 +166,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testZIP.zip"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("Archimède et Lius  Rida Benjelloun  Java  XML  XSLT  JDOM  I", document.get("content").substring(0, 60));
+        assertEquals(
+                "Archimède et Lius  Rida Benjelloun  Java  XML  XSLT  JDOM  I",
+                document.get("content").substring(0, 60));
         assertEquals(200, document.get("content").length());
         assertNotNull(document.get("fullPath"));
     }
@@ -164,7 +178,8 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testTXT.txt"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("Test d'indexation de Txt ", document.get("content").substring(0,25));
+        assertEquals("Test d'indexation de Txt ", document.get("content")
+                .substring(0, 25));
         assertEquals(25, document.get("content").length());
         assertNotNull(document.get("fullPath"));
     }
@@ -174,7 +189,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testHTML.html"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals(" Test Indexation Html  Test Indexation Html Test Indexation ", document.get("content").substring(0, 60));
+        assertEquals(
+                " Test Indexation Html  Test Indexation Html Test Indexation ",
+                document.get("content").substring(0, 60));
         assertEquals(66, document.get("content").length());
         assertNotNull(document.get("fullPath"));
     }
@@ -184,19 +201,29 @@ public class LiusParsingTest extends TestCase {
                 "testMixedIndexing"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("Archimède (http://archimede.bibl.ulaval.ca)\r\ndépôt instituti", document.get("content").substring(0, 60));
+        String[] values = document.getValues("content");
+        assertEquals(1, values.length);
+        assertTrue(document.get("content").contains("Archimède et Lius  Rida Benjelloun  Java  XML  XSLT  JDOM  I"));
         assertEquals(7389, document.get("content").length());
         assertNotNull(document.get("fullPath"));
     }
 
     public void testUrlIndexing() throws MalformedURLException {
-        Document document = parsingService.parse(new UrlResource(
-                "http://www.doculibre.com/index.html"));
-        assertNotNull(document);
-        assertNotNull(document.get("content"));
-        assertEquals("", document.get("content").substring(0, 60));
-        assertEquals(1722, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
+        UrlResource urlResource = new UrlResource(
+                "http://www.doculibre.com/index.html");
+        if (urlResource.exists()) {
+            Document document = parsingService.parse(urlResource);
+            assertNotNull(document);
+            assertNotNull(document.get("content"));
+            assertEquals(
+                    "  DocuLibre - Solutions libres en gestion de l'information  ",
+                    document.get("content").substring(0, 60));
+            assertEquals(1722, document.get("content").length());
+            assertNotNull(document.get("fullPath"));
+        } else {
+            logger
+                    .warn("The test testUrlIndexing wasn't runned because couldn't be found.");
+        }
     }
 
     public void testNodeIndexing() {
@@ -204,7 +231,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testXMLNode.xml"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("Livre 1  reda benjelloun    Programmer en Java  claude de la", document.get("content").substring(0, 60));
+        assertEquals(
+                "Livre 1  reda benjelloun    Programmer en Java  claude de la",
+                document.get("content").substring(0, 60));
         assertEquals(183, document.get("content").length());
         assertNotNull(document.get("fullPath"));
     }
@@ -218,7 +247,8 @@ public class LiusParsingTest extends TestCase {
         assertNotNull(document);
         assertNull(document.get("fullPath"));
         assertNotNull(document.get("content"));
-        assertEquals("Benjelloun Rida Quebec Canada ", document.get("content").substring(0, 30));
+        assertEquals("Benjelloun Rida Quebec Canada ", document.get("content")
+                .substring(0, 30));
         assertEquals(30, document.get("content").length());
     }
 }
