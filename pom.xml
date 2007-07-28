@@ -18,7 +18,7 @@
 	<licenses>
 		<license>
 			<name>Apache License 2.0</name>
-			<url>http://www.apache.org/licenses/</url>
+			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
 		</license>
 	</licenses>
@@ -29,8 +29,34 @@
 	</scm>
 	<issueManagement>
 		<system>GoogleCode</system>
-		<url />
+		<url>http://code.google.com/p/lius4compass/issues/list</url>
 	</issueManagement>
+	<distributionManagement>
+		<repository>
+			<id>raisercostin-repository</id>
+			<name>raisercostin repository</name>
+			<url>file:///D:/settings/windows/.m2/repository</url>
+		</repository>
+		<snapshotRepository>
+			<id>raisercostin-snapshot-repository</id>
+			<name>raisercostin snapshot repository</name>
+			<url>
+				file:///D:/settings/windows/.m2/snapshotRepository
+			</url>
+		</snapshotRepository>
+		<site>
+			<id>website</id>
+			<url>
+				file:///D:/settings/windows/.m2/sites/ro/anyclue/ahs
+			</url>
+		</site>
+	</distributionManagement>
+	<!-- 
+	<distributionManagement>
+		<site></site>
+		<repository></repository>
+	</distributionManagement>
+	 -->
 	<build>
 		<resources>
 			<resource>
@@ -301,6 +327,9 @@
 			</plugin>
 			<plugin>
 				<artifactId>maven-pmd-plugin</artifactId>
+				<configuration>
+					<targetJdk>1.5</targetJdk>
+				</configuration>
 			</plugin>
 			<plugin>
 				<artifactId>maven-checkstyle-plugin</artifactId>
@@ -328,24 +357,4 @@
 			</plugin>
 		</plugins>
 	</reporting>
-	<distributionManagement>
-		<repository>
-			<id>raisercostin-repository</id>
-			<name>raisercostin repository</name>
-			<url>file:///D:/settings/windows/.m2/repository</url>
-		</repository>
-		<snapshotRepository>
-			<id>raisercostin-snapshot-repository</id>
-			<name>raisercostin snapshot repository</name>
-			<url>
-				file:///D:/settings/windows/.m2/snapshotRepository
-			</url>
-		</snapshotRepository>
-		<site>
-			<id>website</id>
-			<url>
-				file:///D:/settings/windows/.m2/sites/ro/anyclue/ahs
-			</url>
-		</site>
-	</distributionManagement>
 </project>
