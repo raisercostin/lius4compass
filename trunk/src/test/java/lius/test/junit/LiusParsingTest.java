@@ -48,10 +48,11 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testPDF.pdf"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("s une suite de projets numériques comme le projet Érudit, la",document.get("content").substring(200,260));
+        assertEquals(
+                "s une suite de projets numériques comme le projet Érudit, la",
+                document.get("content").substring(200, 260));
         assertEquals(7189, document.get("content").length());
         assertNotNull(document.get("fullPath"));
-        assertEquals(14596, document.toString().length());
     }
 
     public void testWordFactoryIndexing() {
@@ -62,7 +63,6 @@ public class LiusParsingTest extends TestCase {
         assertEquals("Test d’indexation Word\r\n\r\n", document.get("content"));
         assertEquals(26, document.get("content").length());
         assertNotNull(document.get("fullPath"));
-        assertEquals(271, document.toString().length());
     }
 
     public void testRtfFactoryIndexing() {
@@ -70,11 +70,10 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testRTF.rtf"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(276, document.toString().length());
+        assertEquals("Test d’indexation Word\n\n", document.get("content")
+                .substring(0, 24));
         assertEquals(24, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testXmlFactoryIndexing() {
@@ -82,11 +81,11 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testXML.xml"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(3913, document.toString().length());
+        assertEquals(
+                "La dimension géographique de l'articulation vie professionne",
+                document.get("content").substring(0, 60));
         assertEquals(1878, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testExcelFactoryIndexing() {
@@ -94,11 +93,10 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testEXCEL.xls"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(284, document.toString().length());
+        assertEquals("Test Excel Rida Benjelloun ", document.get("content")
+                .substring(0, 27));
         assertEquals(27, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testPptFactoryIndexing() {
@@ -106,11 +104,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testPPT.ppt"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(554, document.toString().length());
+        assertEquals("Cliquez pour modifier le style du titre", document.get("content").substring(3, 42));
         assertEquals(163, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testMp3FactoryIndexing() {
@@ -118,11 +114,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testMp3.mp3"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(922, document.toString().length());
+        assertEquals("", document.get("content").substring(0, 0));
         assertEquals(0, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void _testOpenOfficeFactoryIndexingBad() {
@@ -130,11 +124,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testOO.sxw"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(100, document.toString().length());
+        assertEquals("", document.get("content").substring(0, 60));
         assertEquals(100, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testOpenOfficeFactoryIndexing() {
@@ -142,11 +134,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testOO1.sxw"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(387, document.toString().length());
+        assertEquals("Test d'indexation d'OpenOffice  OpenOffice.org 1.1.4 (Win32)", document.get("content").substring(0, 60));
         assertEquals(129, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testOpenOffice2FactoryIndexing() {
@@ -154,11 +144,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testOO2.odt"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(413, document.toString().length());
+        assertEquals("Test OpenOffice version 2  OpenOffice.org/2.0$Win32 OpenOffi", document.get("content").substring(0, 60));
         assertEquals(160, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testZipFactoryIndexing() {
@@ -166,11 +154,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testZIP.zip"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(15638, document.toString().length());
+        assertEquals("Archimède et Lius  Rida Benjelloun  Java  XML  XSLT  JDOM  I", document.get("content").substring(0, 60));
         assertEquals(200, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testTextFactoryIndexing() {
@@ -178,11 +164,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testTXT.txt"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(278, document.toString().length());
+        assertEquals("Test d'indexation de Txt ", document.get("content").substring(0,25));
         assertEquals(25, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testHtmlFactoryIndexing() {
@@ -190,11 +174,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testHTML.html"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(362, document.toString().length());
+        assertEquals(" Test Indexation Html  Test Indexation Html Test Indexation ", document.get("content").substring(0, 60));
         assertEquals(66, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testMixedIndexing() {
@@ -202,11 +184,9 @@ public class LiusParsingTest extends TestCase {
                 "testMixedIndexing"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(15778, document.toString().length());
+        assertEquals("Archimède (http://archimede.bibl.ulaval.ca)\r\ndépôt instituti", document.get("content").substring(0, 60));
         assertEquals(7389, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testUrlIndexing() throws MalformedURLException {
@@ -214,11 +194,9 @@ public class LiusParsingTest extends TestCase {
                 "http://www.doculibre.com/index.html"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(3634, document.toString().length());
+        assertEquals("", document.get("content").substring(0, 60));
         assertEquals(1722, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testNodeIndexing() {
@@ -226,11 +204,9 @@ public class LiusParsingTest extends TestCase {
                 "testFiles/testXMLNode.xml"));
         assertNotNull(document);
         assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
-        assertNotNull(document.get("fullPath"));
-        assertEquals(618, document.toString().length());
+        assertEquals("Livre 1  reda benjelloun    Programmer en Java  claude de la", document.get("content").substring(0, 60));
         assertEquals(183, document.get("content").length());
+        assertNotNull(document.get("fullPath"));
     }
 
     public void testBeanIndexing() {
@@ -240,12 +216,9 @@ public class LiusParsingTest extends TestCase {
         personne.setAdresse("Quebec Canada");
         Document document = parsingService.parse(personne);
         assertNotNull(document);
-        assertNotNull(document.get("content"));
-        assertEquals("",document.get("content").substring(0,60));
-        assertEquals(7189, document.get("content").length());
         assertNull(document.get("fullPath"));
-        assertEquals(253, document.toString().length());
+        assertNotNull(document.get("content"));
+        assertEquals("Benjelloun Rida Quebec Canada ", document.get("content").substring(0, 30));
         assertEquals(30, document.get("content").length());
-        assertEquals("Benjelloun Rida Quebec Canada ", document.get("content"));
     }
 }
