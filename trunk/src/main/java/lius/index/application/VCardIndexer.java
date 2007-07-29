@@ -101,7 +101,7 @@ public class VCardIndexer extends BaseIndexer {
                     c.add(next);
             }
         } catch (IOException e) {
-            LiusUtils.doOnException( e);
+            throw new RuntimeException(e);
         }
         return new ParsingResult(c,"");
     }

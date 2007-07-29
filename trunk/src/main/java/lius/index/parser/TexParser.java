@@ -143,7 +143,7 @@ public class TexParser {
                 System.out.println(tp.getTitle());
             }
         } catch (IOException e) {
-            LiusUtils.doOnException(e);
+            throw new RuntimeException(e);
         }
     }
 }

@@ -60,9 +60,9 @@ public class OOIndexer2 extends OOIndexer {
             xmlDocContent.getRootElement().addContent(meta.detach());
             xmlDocContent.getRootElement().addNamespaceDeclaration(NS_DC);
         } catch (JDOMException e) {
-            LiusUtils.doOnException( e);
+            throw new RuntimeException(e);
         } catch (IOException e) {
-            LiusUtils.doOnException( e);
+            throw new RuntimeException(e);
         }
         return xmlDocContent;
     }

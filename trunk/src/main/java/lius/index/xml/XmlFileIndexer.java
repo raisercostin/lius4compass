@@ -132,7 +132,7 @@ public class XmlFileIndexer extends BaseIndexer {
                 }
             }
         } catch (JaxenException j) {
-            LiusUtils.doOnException(j);
+            throw new RuntimeException(j);
         }
         return chaineConcat.toString().trim();
     }
@@ -245,11 +245,11 @@ public class XmlFileIndexer extends BaseIndexer {
                             }
                         }
                     } catch (JaxenException e) {
-                        LiusUtils.doOnException(e);
+                        throw new RuntimeException(e);
                     } catch (InvocationTargetException ex) {
-                        LiusUtils.doOnException(ex.getMessage(), ex);
+                        throw new RuntimeException(ex.getMessage(), ex);
                     } catch (IllegalAccessException ex) {
-                        LiusUtils.doOnException(ex.getMessage(), ex);
+                        throw new RuntimeException(ex.getMessage(), ex);
                     }
                 }
             } else {
