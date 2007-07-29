@@ -155,7 +155,7 @@ public class NekoHtmlIndexer extends BaseIndexer {
         try {
             org.jdom.Document jdomDoc = this.parse(resource.getInputStream());
             return xfi.getPopulatedLiusFields(jdomDoc,
-                    getConfigurationFields(liusConfig), resource);
+                    getConfigurationFields(liusConfig));
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }

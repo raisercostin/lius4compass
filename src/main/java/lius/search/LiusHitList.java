@@ -47,6 +47,7 @@ import org.apache.lucene.store.Directory;
  * @author Vincent Dussault (vincent.dussault@doculibre.com)
  */
 public class LiusHitList extends AbstractList<LiusHit> implements Serializable {
+    private static final long serialVersionUID = -2546868699322700233L;
     private Hits luceneHits;
     private LiusConfig liusConfig;
     private Query luceneQuery;

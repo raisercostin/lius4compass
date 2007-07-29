@@ -24,14 +24,11 @@ import java.util.Iterator;
 import java.util.List;
 
 import lius.config.LiusConfig;
-import lius.config.LiusField;
-import lius.index.util.LiusUtils;
 import lius.lucene.LuceneActions;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
-import org.apache.lucene.document.Field;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 

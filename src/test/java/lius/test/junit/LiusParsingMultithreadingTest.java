@@ -29,7 +29,7 @@ public class LiusParsingMultithreadingTest extends TestCase {
                 "liusConfig.xml"));
     }
 
-    public void testOnOneThread() throws InterruptedException {
+    public void testOnOneThread() {
         long start = System.currentTimeMillis();
         Thread[] threads = new Thread[1];
         for (int i = 0; i < threads.length; i++) {
@@ -70,7 +70,7 @@ public class LiusParsingMultithreadingTest extends TestCase {
         assertDurationSmallerThan("multipleThreadsMixed", 5000, start, 100);
     }
 
-    public void testOnOneThreadsWord() throws InterruptedException {
+    public void testOnOneThreadsWord() {
         long start = System.currentTimeMillis();
         Thread[] threads = new Thread[1];
         for (int i = 0; i < threads.length; i++) {

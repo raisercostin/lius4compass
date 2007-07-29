@@ -71,18 +71,22 @@ import org.springframework.core.io.Resource;
 public class VCardIndexer extends BaseIndexer {
     static Logger logger = Logger.getLogger(VCardIndexer.class);
 
+    @Override
     public int getType() {
         return 1;
     }
 
+    @Override
     public boolean isConfigured(LiusConfig liusConfig) {
         return liusConfig.getVCardFields() != null;
     }
 
+    @Override
     public Collection getConfigurationFields(LiusConfig liusConfig) {
         return liusConfig.getVCardFields();
     }
 
+    @Override
     public ParsingResult parseResource(LiusConfig liusConfig, Resource resource) {
         Collection c = new ArrayList();
         try {

@@ -37,6 +37,7 @@ import java.util.Vector;
  * @author <a href="mailto:jf@teamskill.de">Jens Fendler </a>
  */
 public class VCard implements Serializable {
+    private static final long serialVersionUID = -2032298679300758190L;
     public static String PATTERN_BEGIN = "BEGIN:VCARD";
     public static String PATTERN_END = "END:VCARD";
     private static String lineSep = System.getProperty("line.separator");
