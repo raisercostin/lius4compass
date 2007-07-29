@@ -59,36 +59,17 @@ public class LiusTestSearch extends TestCase {
 
     public void testSearchIndexPrinLs() {
         LiusHitList res = searchIndex.search("reda", indexDir, liusConfig);
-        assertEquals(5, res.size());
-        assertEquals(0.5,res.get(0).getScore(),1e-1);
-        assertEquals(12,res.get(0).getDocId());
+        assertEquals(3, res.size());
+        assertEquals(0.6,res.get(0).getScore(),1e-1);
         assertEquals(1,res.get(0).getLiusFields().size());
         assertEquals("creator",res.get(0).getLiusFields().get(0).getLabel());
         assertEquals("<span class=\"liusHit\">reda</span> benjelloun",res.get(0).getLiusFields().get(0).getValue());
-
-        assertEquals(0.5,res.get(1).getScore(),1e-1);
-        assertEquals(28,res.get(1).getDocId());
-        assertEquals(1,res.get(1).getLiusFields().size());
-        assertEquals("creator",res.get(1).getLiusFields().get(0).getLabel());
-        assertEquals("<span class=\"liusHit\">reda</span> benjelloun",res.get(1).getLiusFields().get(0).getValue());
-
-        assertEquals(0.5,res.get(2).getScore(),1e-1);
-        assertEquals(44,res.get(2).getDocId());
-        assertEquals(1,res.get(2).getLiusFields().size());
-        assertEquals("creator",res.get(2).getLiusFields().get(0).getLabel());
-        assertEquals("<span class=\"liusHit\">reda</span> benjelloun",res.get(2).getLiusFields().get(0).getValue());
-
-        assertEquals(0.5,res.get(3).getScore(),1e-1);
-        assertEquals(60,res.get(3).getDocId());
-        assertEquals(1,res.get(3).getLiusFields().size());
-        assertEquals("creator",res.get(3).getLiusFields().get(0).getLabel());
-        assertEquals("<span class=\"liusHit\">reda</span> benjelloun",res.get(3).getLiusFields().get(0).getValue());
     }
 
     public void testMultiIndexSearchPrinLs() {
         String[] indexs = { indexDir };
         LiusHitList res = searchIndex.multiIndexSearch("la*", indexs,
                 liusConfig);
-        assertEquals(15, res.size());
+        assertEquals(9, res.size());
     }
 }
