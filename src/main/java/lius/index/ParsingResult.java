@@ -1,21 +1,14 @@
 package lius.index;
 
-import org.apache.log4j.Logger;
-import org.apache.lucene.document.Field;
-
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
 
-import org.apache.commons.beanutils.BeanUtils;
-import org.springframework.core.io.Resource;
-
-import lius.config.LiusDocumentProperty;
 import lius.config.LiusField;
-import lius.index.util.LiusUtils;
+
+import org.apache.log4j.Logger;
+import org.springframework.core.io.Resource;
 
 public class ParsingResult {
     /**

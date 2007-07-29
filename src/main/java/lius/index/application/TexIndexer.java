@@ -27,7 +27,6 @@ import lius.index.BaseIndexer;
 import lius.index.Indexer;
 import lius.index.ParsingResult;
 import lius.index.parser.TexParser;
-import lius.index.util.LiusUtils;
 
 import org.apache.log4j.Logger;
 import org.springframework.core.io.Resource;

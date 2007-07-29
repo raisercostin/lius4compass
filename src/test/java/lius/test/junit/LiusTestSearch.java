@@ -17,16 +17,12 @@
 package lius.test.junit;
 
 import java.io.File;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import junit.framework.TestCase;
 import lius.config.LiusConfig;
 import lius.config.LiusConfigBuilder;
-import lius.config.LiusField;
-import lius.index.util.LiusUtils;
 import lius.lucene.LuceneActions;
-import lius.search.LiusHit;
 import lius.search.LiusHitList;
 import lius.search.SearchIndex;
 
