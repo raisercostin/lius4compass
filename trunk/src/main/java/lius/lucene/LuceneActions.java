@@ -27,7 +27,6 @@ import java.util.Map;
 import lius.config.LiusConfig;
 import lius.config.LiusDocumentProperty;
 import lius.config.LiusField;
-import lius.index.util.LiusUtils;
 import lius.search.LiusHit;
 
 import org.apache.log4j.Logger;
