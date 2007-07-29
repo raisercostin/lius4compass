@@ -14,26 +14,33 @@ import org.compass.core.spi.InternalCompassSession;
 import org.springframework.core.io.Resource;
 
 public class DefaultParsingService implements ParsingService {
-    private LiusConfig lc;
+    private LiusConfig liusConfig;
+
+    public DefaultParsingService() {
+    }
 
     public DefaultParsingService(Resource liusConfigResource) {
-        lc = LiusConfigBuilder.getSingletonInstance().getLiusConfig(
+        liusConfig = LiusConfigBuilder.getSingletonInstance().getLiusConfig(
                 liusConfigResource);
     }
 
+    public void setLiusConfig(LiusConfig liusConfig) {
+        this.liusConfig = liusConfig;
+    }
+
     public Document parse(Resource resource) {
-        IndexService indexer = IndexerFactory.getIndexer(resource, lc);
+        IndexService indexer = IndexerFactory.getIndexer(resource, liusConfig);
         return indexer.getDocument(resource);
     }
 
     public List<Document> parse(Resource resource,
             boolean oneDocumentForAllSubResources) {
-        IndexService indexer = IndexerFactory.getIndexer(resource, lc);
+        IndexService indexer = IndexerFactory.getIndexer(resource, liusConfig);
         return indexer.getDocuments(resource, oneDocumentForAllSubResources);
     }
 
     public Document parse(Object bean) {
-        IndexService indexer = IndexerFactory.getIndexer(lc);
+        IndexService indexer = IndexerFactory.getIndexer(liusConfig);
         return indexer.getDocumentFromObject(bean);
     }
 

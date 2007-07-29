@@ -61,23 +61,27 @@ public abstract class BaseIndexer implements Indexer, IndexService {
 
     public List<Document> getDocuments(Resource resource,
             boolean oneDocumentForAllSubResources) {
-        if (oneDocumentForAllSubResources) {
-            List<Document> result = new ArrayList<Document>();
-            Document luceneDoc = getDocument(resource);
-            result.add(luceneDoc);
-            return result;
-        } else {
-            try {
+        try {
+            if (oneDocumentForAllSubResources || resource.getFile().isFile()) {
                 List<Document> result = new ArrayList<Document>();
-                for (Iterator iterator = FileUtils.iterateFiles(resource
-                        .getFile(), null, true); iterator.hasNext();) {
-                    File file = (File) iterator.next();
-                    result.add(getDocument(new FileSystemResource(file)));
-                }
+                Document luceneDoc = getDocument(resource);
+                result.add(luceneDoc);
                 return result;
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+            } else {
+                try {
+                    List<Document> result = new ArrayList<Document>();
+                    for (Iterator iterator = FileUtils.iterateFiles(resource
+                            .getFile(), null, true); iterator.hasNext();) {
+                        File file = (File) iterator.next();
+                        result.add(getDocument(new FileSystemResource(file)));
+                    }
+                    return result;
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
