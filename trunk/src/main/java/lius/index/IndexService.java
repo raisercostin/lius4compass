@@ -7,8 +7,8 @@ import org.springframework.core.io.Resource;
 
 /**
  * Each indexService should be stateless.
+ * 
  * @author raisercostin
- *
  */
 public interface IndexService extends Indexer {
     /**
@@ -29,11 +29,9 @@ public interface IndexService extends Indexer {
      */
     Document getDocumentFromObject(Object object);
 
-    @Deprecated
-    void index(String string, Resource resource);
-
-    @Deprecated
-    void indexBean(String string, Object object);
-
+    // @Deprecated
+    // void index(String string, Resource resource);
+    // @Deprecated
+    // void indexBean(String string, Object object);
     void setUp(LiusConfig lc);
 }

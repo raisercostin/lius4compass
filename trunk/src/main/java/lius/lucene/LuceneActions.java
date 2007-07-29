@@ -18,7 +18,6 @@ package lius.lucene;
  */
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -210,256 +209,256 @@ public class LuceneActions {
      * Méthode permettant d'insérer une liste de documents Lucene dans l'index.
      * <br/><br/>Method that inserts a list of Lucene documents in the index.
      */
-    public void save(List luceneDocs, IndexWriter writer, LiusConfig lc) {
-        for (int i = 0; i < luceneDocs.size(); i++)
-            save((Document) luceneDocs.get(i), writer, lc);
-    }
+//    private void save(List luceneDocs, IndexWriter writer, LiusConfig lc) {
+//        for (int i = 0; i < luceneDocs.size(); i++)
+//            save((Document) luceneDocs.get(i), writer, lc);
+//    }
 
     /**
      * Méthode permettant d'insérer un document Lucene dans l'index <br/><br/>
      * Méthod that inserts a Lucene document in the index.
      */
-    public void save(Document luceneDoc, IndexWriter writer, LiusConfig lc) {
-        try {
-            writer.addDocument(luceneDoc);
-        } catch (IOException e) {
-            LiusUtils.doOnException( e);
-        }
-        if (lc.getOptimizeValue() != null) {
-            if (lc.getOptimize()) {
-                try {
-                    writer.optimize();
-                } catch (IOException e) {
-                    LiusUtils.doOnException( e);
-                }
-            }
-        }
-    }
+//    private void save(Document luceneDoc, IndexWriter writer, LiusConfig lc) {
+//        try {
+//            writer.addDocument(luceneDoc);
+//        } catch (IOException e) {
+//            LiusUtils.doOnException( e);
+//        }
+//        if (lc.getOptimizeValue() != null) {
+//            if (lc.getOptimize()) {
+//                try {
+//                    writer.optimize();
+//                } catch (IOException e) {
+//                    LiusUtils.doOnException( e);
+//                }
+//            }
+//        }
+//    }
 
-    public void index(Document doc, String indexDir, LiusConfig lc)
-            throws IOException {
-        Analyzer analyzer = AnalyzerFactory.getAnalyzer(lc);
-        IndexWriter writer = null;
-        try {
-            boolean createIndex = createIndexValue(lc.getCreateIndex(),
-                    indexDir);
-            Directory fsDir = FSDirectory.getDirectory(indexDir, createIndex);
-            writer = new IndexWriter(fsDir, analyzer, createIndex);
-            setIndexWriterProps(writer, lc);
-            save(doc, writer, lc);
-        } catch (Exception e) {
-            LiusUtils.doOnException( e);
-        } finally {
-            unLock(indexDir);
-            if (writer != null) {
-                writer.close();
-            }
-        }
-    }
+//    public void index(Document doc, String indexDir, LiusConfig lc)
+//            throws IOException {
+//        Analyzer analyzer = AnalyzerFactory.getAnalyzer(lc);
+//        IndexWriter writer = null;
+//        try {
+//            boolean createIndex = createIndexValue(lc.getCreateIndex(),
+//                    indexDir);
+//            Directory fsDir = FSDirectory.getDirectory(indexDir, createIndex);
+//            writer = new IndexWriter(fsDir, analyzer, createIndex);
+//            setIndexWriterProps(writer, lc);
+//            save(doc, writer, lc);
+//        } catch (Exception e) {
+//            LiusUtils.doOnException( e);
+//        } finally {
+//            unLock(indexDir);
+//            if (writer != null) {
+//                writer.close();
+//            }
+//        }
+//    }
+//
+//    public Directory index(Document doc, Directory indexDir, LiusConfig lc)
+//            throws IOException {
+//        Analyzer analyzer = AnalyzerFactory.getAnalyzer(lc);
+//        IndexWriter writer = null;
+//        try {
+//            writer = new IndexWriter(indexDir, analyzer, true);
+//            setIndexWriterProps(writer, lc);
+//            save(doc, writer, lc);
+//        } catch (Exception e) {
+//            LiusUtils.doOnException( e);
+//        } finally {
+//            if (writer != null) {
+//                writer.close();
+//            }
+//        }
+//        return indexDir;
+//    }
+//
+//    public void index(String toIndex, String indexDir, LiusConfig lc)
+//            throws IOException {
+//        Analyzer analyzer = AnalyzerFactory.getAnalyzer(lc);
+//        IndexWriter writer = null;
+//        try {
+//            boolean createIndex = createIndexValue(lc.getCreateIndex(),
+//                    indexDir);
+//            Directory fsDir = FSDirectory.getDirectory(indexDir, createIndex);
+//            writer = new IndexWriter(fsDir, analyzer, createIndex);
+//            setIndexWriterProps(writer, lc);
+//            fileDirectoryIndexing(toIndex, indexDir, lc);
+//        } catch (Exception e) {
+//            LiusUtils.doOnException("Error trying to index.", e);
+//        } finally {
+//            unLock(indexDir);
+//            if (writer != null) {
+//                writer.close();
+//            }
+//        }
+//    }
 
-    public Directory index(Document doc, Directory indexDir, LiusConfig lc)
-            throws IOException {
-        Analyzer analyzer = AnalyzerFactory.getAnalyzer(lc);
-        IndexWriter writer = null;
-        try {
-            writer = new IndexWriter(indexDir, analyzer, true);
-            setIndexWriterProps(writer, lc);
-            save(doc, writer, lc);
-        } catch (Exception e) {
-            LiusUtils.doOnException( e);
-        } finally {
-            if (writer != null) {
-                writer.close();
-            }
-        }
-        return indexDir;
-    }
+//    public void recursifIndexing(File f, String indexDir, LiusConfig lc) {
+//        IndexWriter iw = null;
+//        try {
+//            iw = openIndex(indexDir, lc);
+//            fileDirectoryProcessing(f, indexDir, lc, iw);
+//            iw.optimize();
+//            iw.close();
+//        } catch (IOException e) {
+//            LiusUtils.doOnException( e);
+//        } finally {
+//            if (iw != null) {
+//                try {
+//                    unLock(indexDir);
+//                    iw.close();
+//                } catch (IOException e1) {
+//                    LiusUtils.doOnException(e1);
+//                }
+//            }
+//        }
+//    }
 
-    public void index(String toIndex, String indexDir, LiusConfig lc)
-            throws IOException {
-        Analyzer analyzer = AnalyzerFactory.getAnalyzer(lc);
-        IndexWriter writer = null;
-        try {
-            boolean createIndex = createIndexValue(lc.getCreateIndex(),
-                    indexDir);
-            Directory fsDir = FSDirectory.getDirectory(indexDir, createIndex);
-            writer = new IndexWriter(fsDir, analyzer, createIndex);
-            setIndexWriterProps(writer, lc);
-            fileDirectoryIndexing(toIndex, indexDir, lc);
-        } catch (Exception e) {
-            LiusUtils.doOnException("Error trying to index.", e);
-        } finally {
-            unLock(indexDir);
-            if (writer != null) {
-                writer.close();
-            }
-        }
-    }
+//    public void indexSubDirectories(File f, String indexDir, LiusConfig lc) {
+//        recursifIndexing(f, indexDir, lc);
+//    }
+//
+//    private void fileDirectoryProcessing(File f, String indexDir,
+//            LiusConfig lc, IndexWriter iw) throws IOException {
+//        Indexer indexer = null;
+//        if (f.isFile()) {
+//            indexer = IndexerFactory.getIndexer(f, lc);
+//            if (indexer != null) {
+//                Document doc = populateLuceneDoc(indexer
+//                        .parseResource(lc, new FileSystemResource(f)).getCollection());
+//                doc.add(new Field("filePath", f.getAbsolutePath(),
+//                        Field.Store.YES, Field.Index.UN_TOKENIZED));
+//                iw.addDocument(doc);
+//            }
+//        } else {
+//            File[] files = f.listFiles();
+//            for (int i = 0; i < files.length; i++) {
+//                fileDirectoryProcessing(files[i], indexDir, lc, iw);
+//            }
+//        }
+//    }
+//
+//    public void addIndexes(Directory[] directoriesToIndex, String indexDir,
+//            LiusConfig lc) {
+//        Analyzer analyzer = AnalyzerFactory.getAnalyzer(lc);
+//        IndexWriter writer = null;
+//        try {
+//            boolean createIndex = createIndexValue(lc.getCreateIndex(),
+//                    indexDir);
+//            Directory fsDir = FSDirectory.getDirectory(indexDir, createIndex);
+//            writer = new IndexWriter(fsDir, analyzer, createIndex);
+//            setIndexWriterProps(writer, lc);
+//            writer.addIndexes(directoriesToIndex);
+//        } catch (Exception e) {
+//            LiusUtils.doOnException( e);
+//        } finally {
+//            try {
+//                if (writer != null) {
+//                    writer.close();
+//                }
+//            } catch (IOException e) {
+//                LiusUtils.doOnException( e);
+//            }
+//        }
+//    }
 
-    public void recursifIndexing(File f, String indexDir, LiusConfig lc) {
-        IndexWriter iw = null;
-        try {
-            iw = openIndex(indexDir, lc);
-            fileDirectoryProcessing(f, indexDir, lc, iw);
-            iw.optimize();
-            iw.close();
-        } catch (IOException e) {
-            LiusUtils.doOnException( e);
-        } finally {
-            if (iw != null) {
-                try {
-                    unLock(indexDir);
-                    iw.close();
-                } catch (IOException e1) {
-                    LiusUtils.doOnException(e1);
-                }
-            }
-        }
-    }
-
-    public void indexSubDirectories(File f, String indexDir, LiusConfig lc) {
-        recursifIndexing(f, indexDir, lc);
-    }
-
-    private void fileDirectoryProcessing(File f, String indexDir,
-            LiusConfig lc, IndexWriter iw) throws IOException {
-        Indexer indexer = null;
-        if (f.isFile()) {
-            indexer = IndexerFactory.getIndexer(f, lc);
-            if (indexer != null) {
-                Document doc = populateLuceneDoc(indexer
-                        .parseResource(lc, new FileSystemResource(f)).getCollection());
-                doc.add(new Field("filePath", f.getAbsolutePath(),
-                        Field.Store.YES, Field.Index.UN_TOKENIZED));
-                iw.addDocument(doc);
-            }
-        } else {
-            File[] files = f.listFiles();
-            for (int i = 0; i < files.length; i++) {
-                fileDirectoryProcessing(files[i], indexDir, lc, iw);
-            }
-        }
-    }
-
-    public void addIndexes(Directory[] directoriesToIndex, String indexDir,
-            LiusConfig lc) {
-        Analyzer analyzer = AnalyzerFactory.getAnalyzer(lc);
-        IndexWriter writer = null;
-        try {
-            boolean createIndex = createIndexValue(lc.getCreateIndex(),
-                    indexDir);
-            Directory fsDir = FSDirectory.getDirectory(indexDir, createIndex);
-            writer = new IndexWriter(fsDir, analyzer, createIndex);
-            setIndexWriterProps(writer, lc);
-            writer.addIndexes(directoriesToIndex);
-        } catch (Exception e) {
-            LiusUtils.doOnException( e);
-        } finally {
-            try {
-                if (writer != null) {
-                    writer.close();
-                }
-            } catch (IOException e) {
-                LiusUtils.doOnException( e);
-            }
-        }
-    }
-
-    public IndexWriter openIndex(String indexDir, LiusConfig lc)
-            throws IOException {
-        Analyzer analyzer = AnalyzerFactory.getAnalyzer(lc);
-        IndexWriter writer = null;
-        try {
-            boolean createIndex = createIndexValue(lc.getCreateIndex(),
-                    indexDir);
-            Directory fsDir = FSDirectory.getDirectory(indexDir, createIndex);
-            writer = new IndexWriter(fsDir, analyzer, createIndex);
-            setIndexWriterProps(writer, lc);
-        } catch (Exception e) {
-            LiusUtils.doOnException( e);
-            unLock(indexDir);
-            if (writer != null) {
-                writer.close();
-            }
-        }
-        return writer;
-    }
-
+//    public IndexWriter openIndex(String indexDir, LiusConfig lc)
+//            throws IOException {
+//        Analyzer analyzer = AnalyzerFactory.getAnalyzer(lc);
+//        IndexWriter writer = null;
+//        try {
+//            boolean createIndex = createIndexValue(lc.getCreateIndex(),
+//                    indexDir);
+//            Directory fsDir = FSDirectory.getDirectory(indexDir, createIndex);
+//            writer = new IndexWriter(fsDir, analyzer, createIndex);
+//            setIndexWriterProps(writer, lc);
+//        } catch (Exception e) {
+//            LiusUtils.doOnException( e);
+//            unLock(indexDir);
+//            if (writer != null) {
+//                writer.close();
+//            }
+//        }
+//        return writer;
+//    }
+//
     /**
      * Méthode appelée par la méthode index(). Elle permet d'effectuer le
      * processus d'indexation. <br/><br/>Method called by index(). It processes
      * the indexation.
      */
-    private void fileDirectoryIndexing(String toIndex, String indexDir,
-            LiusConfig lc) throws IOException {
-        String sep = System.getProperty("file.separator");
-        File typFD = new File(toIndex);
-        if (typFD.isFile()) {
-            fileProcessing(typFD, indexDir, lc);
-        } else if (typFD.isDirectory()) {
-            File[] liste = (new File(toIndex)).listFiles();
-            for (int i = 0; i < liste.length; i++) {
-                String fileToIndexB = toIndex + sep + liste[i].getName();
-                File fileToIndexBF = new File(fileToIndexB);
-                if (fileToIndexBF.isDirectory()) {
-                    fileDirectoryIndexing(fileToIndexB, indexDir, lc);
-                } else {
-                    fileProcessing(fileToIndexBF, indexDir, lc);
-                }
-            }
-        }
-    }
+//    private void fileDirectoryIndexing(String toIndex, String indexDir,
+//            LiusConfig lc) throws IOException {
+//        String sep = System.getProperty("file.separator");
+//        File typFD = new File(toIndex);
+//        if (typFD.isFile()) {
+//            fileProcessing(typFD, indexDir, lc);
+//        } else if (typFD.isDirectory()) {
+//            File[] liste = (new File(toIndex)).listFiles();
+//            for (int i = 0; i < liste.length; i++) {
+//                String fileToIndexB = toIndex + sep + liste[i].getName();
+//                File fileToIndexBF = new File(fileToIndexB);
+//                if (fileToIndexBF.isDirectory()) {
+//                    fileDirectoryIndexing(fileToIndexB, indexDir, lc);
+//                } else {
+//                    fileProcessing(fileToIndexBF, indexDir, lc);
+//                }
+//            }
+//        }
+//    }
 
     /**
      * Méthode appelée par la la méthode fileDirectoryIndexing(), pour indexer
      * en fonction du type de fichier. <br/><br/>Method called by
      * fileDirectoryIndexing(), for indexing related to the file type.
      */
-    private void fileProcessing(File fileToIndex, String indexDir, LiusConfig lc) {
-        IndexService indexer = null;
-        indexer = IndexerFactory.getIndexer(fileToIndex, lc);
-        if (indexer != null) {
-            if (logger.isDebugEnabled()) {
-                logger.debug("Index file [" + fileToIndex.getAbsolutePath()
-                        + "] ...");
-            }
-            indexer.index(indexDir, new FileSystemResource(fileToIndex));
-        } else {
-            logger.warn("Couldn't find indexer for file ["
-                    + fileToIndex.getAbsolutePath() + "]. No indexing.");
-        }
-    }
+//    private void fileProcessing(File fileToIndex, String indexDir, LiusConfig lc) {
+//        IndexService indexer = null;
+//        indexer = IndexerFactory.getIndexer(fileToIndex, lc);
+//        if (indexer != null) {
+//            if (logger.isDebugEnabled()) {
+//                logger.debug("Index file [" + fileToIndex.getAbsolutePath()
+//                        + "] ...");
+//            }
+//            indexer.index(indexDir, new FileSystemResource(fileToIndex));
+//        } else {
+//            logger.warn("Couldn't find indexer for file ["
+//                    + fileToIndex.getAbsolutePath() + "]. No indexing.");
+//        }
+//    }
 
     /**
      * Méthode permettant de forcer l'ouverture de l'index de Lucene quand il
      * est fermé. <br/><br/>Method that force the opening of Lucene index when
      * it is closed.
      */
-    public void unLock(String indexDir) {
-        try {
-            Directory directory = FSDirectory.getDirectory(indexDir, false);
-            IndexReader.open(directory);
-            if (IndexReader.isLocked(directory)) {
-                IndexReader.unlock(directory);
-            }
-        } catch (IOException e) {
-            LiusUtils.doOnException( e);
-        }
-    }
-
-    public void deleteAllDocuments(String indexDir) {
-        try {
-            Directory directory = FSDirectory.getDirectory(indexDir, false);
-            IndexReader ir = IndexReader.open(directory);
-            int num = ir.numDocs();
-            for (int i = 0; i <= num - 1; i++) {
-                ir.deleteDocument(i);
-            }
-            ir.close();
-        } catch (IOException e) {
-            LiusUtils.doOnException( e);
-        }
-    }
+//    public void unLock(String indexDir) {
+//        try {
+//            Directory directory = FSDirectory.getDirectory(indexDir, false);
+//            IndexReader.open(directory);
+//            if (IndexReader.isLocked(directory)) {
+//                IndexReader.unlock(directory);
+//            }
+//        } catch (IOException e) {
+//            LiusUtils.doOnException( e);
+//        }
+//    }
+//
+//    public void deleteAllDocuments(String indexDir) {
+//        try {
+//            Directory directory = FSDirectory.getDirectory(indexDir, false);
+//            IndexReader ir = IndexReader.open(directory);
+//            int num = ir.numDocs();
+//            for (int i = 0; i <= num - 1; i++) {
+//                ir.deleteDocument(i);
+//            }
+//            ir.close();
+//        } catch (IOException e) {
+//            LiusUtils.doOnException( e);
+//        }
+//    }
 
     public List ListAllDocuments(String indexDir, LiusConfig lc) {
         List documentsList = new ArrayList();
@@ -496,25 +495,25 @@ public class LuceneActions {
         }
         return documentsList;
     }
-
-    public void unDeleteAllDocuments(String indexDir) {
-        try {
-            Directory directory = FSDirectory.getDirectory(indexDir, false);
-            IndexReader ir = IndexReader.open(directory);
-            ir.undeleteAll();
-            ir.close();
-        } catch (IOException e) {
-            LiusUtils.doOnException( e);
-        }
-    }
-
-    public void newIndex(String indexDir) {
-        try {
-            Directory directory = FSDirectory.getDirectory(indexDir, true);
-        } catch (IOException ex) {
-            LiusUtils.doOnException(ex);
-        }
-    }
+//
+//    public void unDeleteAllDocuments(String indexDir) {
+//        try {
+//            Directory directory = FSDirectory.getDirectory(indexDir, false);
+//            IndexReader ir = IndexReader.open(directory);
+//            ir.undeleteAll();
+//            ir.close();
+//        } catch (IOException e) {
+//            LiusUtils.doOnException( e);
+//        }
+//    }
+//
+//    public void newIndex(String indexDir) {
+//        try {
+//            Directory directory = FSDirectory.getDirectory(indexDir, true);
+//        } catch (IOException ex) {
+//            LiusUtils.doOnException(ex);
+//        }
+//    }
 
     /**
      * Méthode permettant d'initialiser les propriétés de l'index si ces
@@ -522,15 +521,15 @@ public class LuceneActions {
      * Method that initializes the properties of the index if those were placed
      * in the configuration file.
      */
-    private void setIndexWriterProps(IndexWriter writer, LiusConfig lc) {
-        if (lc.getMergeFactor() != null)
-            writer
-                    .setMergeFactor((new Integer(lc.getMergeFactor()))
-                            .intValue());
-        if (lc.getMaxMergeDocs() != null)
-            writer.setMaxMergeDocs((new Integer(lc.getMaxMergeDocs()))
-                    .intValue());
-    }
+//    private void setIndexWriterProps(IndexWriter writer, LiusConfig lc) {
+//        if (lc.getMergeFactor() != null)
+//            writer
+//                    .setMergeFactor((new Integer(lc.getMergeFactor()))
+//                            .intValue());
+//        if (lc.getMaxMergeDocs() != null)
+//            writer.setMaxMergeDocs((new Integer(lc.getMaxMergeDocs()))
+//                    .intValue());
+//    }
 
     /**
      * Méthode permettant d'effacer un document dans l'index. Elle prend comme
@@ -539,20 +538,20 @@ public class LuceneActions {
      * parameters are the directory of the index, the name of the field and the
      * content searched.
      */
-    public int deleteDoc(String indexDir, String field, String content) {
-        int nbDelete = 0;
-        try {
-            Directory fsDir = FSDirectory.getDirectory(indexDir, false);
-            IndexReader indexReader = IndexReader.open(fsDir);
-            Term t = new Term(field, content);
-            nbDelete = indexReader.deleteDocuments(t);
-            indexReader.close();
-            logger.debug("Document supprimé");
-        } catch (IOException e) {
-            LiusUtils.doOnException( e);
-        }
-        return nbDelete;
-    }
+//    public int deleteDoc(String indexDir, String field, String content) {
+//        int nbDelete = 0;
+//        try {
+//            Directory fsDir = FSDirectory.getDirectory(indexDir, false);
+//            IndexReader indexReader = IndexReader.open(fsDir);
+//            Term t = new Term(field, content);
+//            nbDelete = indexReader.deleteDocuments(t);
+//            indexReader.close();
+//            logger.debug("Document supprimé");
+//        } catch (IOException e) {
+//            LiusUtils.doOnException( e);
+//        }
+//        return nbDelete;
+//    }
 
     /**
      * Méthode permettant d'effacer un document dans l'index. Elle prend comme
@@ -560,31 +559,31 @@ public class LuceneActions {
      * <br/>Method that erases a document from the index. Its parameters are the
      * directory of the index and a Lucene term object.
      */
-    public int deleteDoc(String indexDir, Term t) {
-        int nbDelete = 0;
-        try {
-            Directory fsDir = FSDirectory.getDirectory(indexDir, false);
-            IndexReader indexReader = IndexReader.open(fsDir);
-            nbDelete = indexReader.deleteDocuments(t);
-            indexReader.close();
-            logger.info("Document supprimé");
-        } catch (IOException e) {
-            LiusUtils.doOnException( e);
-        }
-        return nbDelete;
-    }
-
-    public void deleteDoc(String indexDir, int docNum) {
-        try {
-            Directory fsDir = FSDirectory.getDirectory(indexDir, false);
-            IndexReader indexReader = IndexReader.open(fsDir);
-            indexReader.deleteDocument(docNum);
-            indexReader.close();
-            logger.info("Document supprimé");
-        } catch (IOException e) {
-            LiusUtils.doOnException( e);
-        }
-    }
+//    public int deleteDoc(String indexDir, Term t) {
+//        int nbDelete = 0;
+//        try {
+//            Directory fsDir = FSDirectory.getDirectory(indexDir, false);
+//            IndexReader indexReader = IndexReader.open(fsDir);
+//            nbDelete = indexReader.deleteDocuments(t);
+//            indexReader.close();
+//            logger.info("Document supprimé");
+//        } catch (IOException e) {
+//            LiusUtils.doOnException( e);
+//        }
+//        return nbDelete;
+//    }
+//
+//    public void deleteDoc(String indexDir, int docNum) {
+//        try {
+//            Directory fsDir = FSDirectory.getDirectory(indexDir, false);
+//            IndexReader indexReader = IndexReader.open(fsDir);
+//            indexReader.deleteDocument(docNum);
+//            indexReader.close();
+//            logger.info("Document supprimé");
+//        } catch (IOException e) {
+//            LiusUtils.doOnException( e);
+//        }
+//    }
 
     /**
      * Méthode permettant de mettre à jour un document dans l'index. Elle prend
@@ -595,12 +594,12 @@ public class LuceneActions {
      * an Lucene Term object, the file to index in place of the one found and
      * the XML configuration file which will serve for indexing.
      */
-    public void updateDoc(String rep, Term t, String fileToReindex,
-            LiusConfig liusConfig) throws IOException {
-        deleteDoc(rep, t);
-        index(fileToReindex, rep, liusConfig);
-        logger.info("Document mis à jour");
-    }
+//    public void updateDoc(String rep, Term t, String fileToReindex,
+//            LiusConfig liusConfig) throws IOException {
+//        deleteDoc(rep, t);
+//        index(fileToReindex, rep, liusConfig);
+//        logger.info("Document mis à jour");
+//    }
 
     /**
      * Méthode permettant de mettre à jour un document dans l'index. Elle prend
@@ -612,33 +611,33 @@ public class LuceneActions {
      * the searched value, the searched value, the file to index in place of the
      * one found and the XML configuration which will serve for indexing.
      */
-    public void updateDoc(String rep, String field, String content,
-            String fileToReindex, LiusConfig liusConfig) throws IOException {
-        deleteDoc(rep, field, content);
-        index(fileToReindex, rep, liusConfig);
-        logger.info("Document mis à jour");
-    }
+//    public void updateDoc(String rep, String field, String content,
+//            String fileToReindex, LiusConfig liusConfig) throws IOException {
+//        deleteDoc(rep, field, content);
+//        index(fileToReindex, rep, liusConfig);
+//        logger.info("Document mis à jour");
+//    }
 
-    public boolean createIndexValue(String valueCreateIndex, String indexDir) {
-        boolean createIndex = false;
-        if (valueCreateIndex.equals("true"))
-            createIndex = true;
-        else if (valueCreateIndex.equals("false"))
-            createIndex = false;
-        else if (valueCreateIndex.equals("auto")) {
-            createIndex = !indexExists(indexDir);
-        }
-        return createIndex;
-    }
-
+//    public boolean createIndexValue(String valueCreateIndex, String indexDir) {
+//        boolean createIndex = false;
+//        if (valueCreateIndex.equals("true"))
+//            createIndex = true;
+//        else if (valueCreateIndex.equals("false"))
+//            createIndex = false;
+//        else if (valueCreateIndex.equals("auto")) {
+//            createIndex = !indexExists(indexDir);
+//        }
+//        return createIndex;
+//    }
+//
     /**
      * Méthode permettant de vérifier le répertoire de sortie de l'index. S'il
      * n'existe pas il sera crée. <br/><br/>Method for verifying the output
      * directory of index. If it does not exist it will be created.
      */
-    public boolean indexExists(String indexDir) {
-        return IndexReader.indexExists(indexDir);
-    }
+//    public boolean indexExists(String indexDir) {
+//        return IndexReader.indexExists(indexDir);
+//    }
 
     public Directory getDirectory(String directoryPath) {
         try {

@@ -17,14 +17,12 @@ package lius.index.html;
  * limitations under the License.
  */
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
 import lius.config.LiusConfig;
 import lius.config.LiusField;
-import lius.index.BaseIndexer;
 import lius.index.BaseIndexer;
 import lius.index.ParsingResult;
 

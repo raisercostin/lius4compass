@@ -18,16 +18,13 @@ package lius.index.zip;
  */
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 import lius.config.LiusConfig;
 import lius.index.BaseIndexer;
 import lius.index.IndexService;
-import lius.index.Indexer;
 import lius.index.IndexerFactory;
-import lius.index.MimeTypeUtils;
 import lius.index.ParsingResult;
 import lius.index.util.LiusUtils;
 

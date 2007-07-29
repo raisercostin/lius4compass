@@ -16,7 +16,7 @@
 		<createIndex value="auto"/>
 		<indexWriterProperty mergeFactor="10" maxMergeDocs="100" optimize="true"/>
 	</properties>
-														
+
 	<index>
 		<xml>
 			<xmlFile ns="http://purl.org/dc/elements/1.1/" setBoost="2.0">
@@ -313,7 +313,5 @@
 			<luceneField name="creator" label="creator"/>	
 			<luceneField name="fullText" label="full text" setFragmenter="50"/>	
 		</fieldsToDisplay>
-		
 	</searchResult>
-	
 </luceneIndex>

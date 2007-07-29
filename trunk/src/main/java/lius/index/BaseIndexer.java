@@ -24,13 +24,10 @@ import lius.config.LiusConfig;
 import lius.config.LiusField;
 import lius.index.util.LiusUtils;
 import lius.lucene.LuceneActions;
-import lius.transaction.LiusTransactionManager;
 
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
-import org.apache.lucene.store.Directory;
-import org.apache.lucene.store.RAMDirectory;
 import org.springframework.core.io.Resource;
 
 /**
@@ -42,8 +39,6 @@ public abstract class BaseIndexer implements Indexer, IndexService {
     public static Logger logger = Logger.getLogger(BaseIndexer.class);
     protected LuceneActions luceneActions = new LuceneActions();
     protected LiusConfig liusConfig = null;
-    private Directory ramDir = null;
-    private LiusTransactionManager transaction = null;
 
     public BaseIndexer() {
     }
@@ -55,31 +50,15 @@ public abstract class BaseIndexer implements Indexer, IndexService {
     public void setUp(LiusConfig lc) {
         this.liusConfig = lc;
     }
-
-    public synchronized void indexUsingTransaction(String indexDir,
-            Resource resource) {
-        Document luceneDoc = luceneActions
-                .populateLuceneDoc(parseResourceInternal(resource));
-        ramDir = new RAMDirectory();
-        transaction = new LiusTransactionManager(luceneDoc, ramDir, indexDir,
-                liusConfig);
-        try {
-            transaction.start();
-            transaction.commit();
-        } catch (IOException e) {
-            LiusUtils.doOnException(e);
-            transaction.rollBack();
-        }
-    }
-
-    public void index(String indexDir, Resource resource) {
-        indexAndGetDocument(indexDir, resource);
-    }
-    
-    public void indexBean(String indexDir, Object object)
-    {
-        indexAndGetDocument2(indexDir, object);
-    }
+//
+//    private void index(String indexDir, Resource resource) {
+//        indexAndGetDocument(indexDir, resource);
+//    }
+//    
+//    private void indexBean(String indexDir, Object object)
+//    {
+//        indexAndGetDocument2(indexDir, object);
+//    }
 
     public Document getDocument(Resource resource) {
         Document luceneDoc = luceneActions
@@ -96,98 +75,79 @@ public abstract class BaseIndexer implements Indexer, IndexService {
                 .populateLuceneDoc(parseObjectInternal(object));
         return luceneDoc;
     }
+//
+//    public synchronized Document indexAndGetDocument(String indexDir,
+//            Resource resource) {
+//        Document luceneDoc = luceneActions
+//                .populateLuceneDoc(parseResourceInternal(resource));
+//        try {
+//            luceneActions.index(luceneDoc, indexDir, liusConfig);
+//        } catch (IOException e) {
+//            LiusUtils.doOnException(e);
+//        }
+//        return luceneDoc;
+//    }
+//
+//    public synchronized Document indexAndGetDocument2(String indexDir,
+//            Object bean) {
+//        Document luceneDoc = luceneActions
+//                .populateLuceneDoc(parseObjectInternal(bean));
+//        try {
+//            luceneActions.index(luceneDoc, indexDir, liusConfig);
+//        } catch (IOException e) {
+//            LiusUtils.doOnException(e);
+//        }
+//        return luceneDoc;
+//    }
+//
+//    public synchronized void index(String indexDir, List LuceneCostumFields,
+//            Resource resource) {
+//        Document luceneDoc = luceneActions
+//                .populateLuceneDoc(parseResourceInternal(resource));
+//        for (int i = 0; i < LuceneCostumFields.size(); i++) {
+//            luceneDoc.add((Field) LuceneCostumFields.get(i));
+//        }
+//        try {
+//            luceneActions.index(luceneDoc, indexDir, liusConfig);
+//        } catch (IOException e) {
+//            LiusUtils.doOnException(e);
+//        }
+//    }
 
-    public synchronized Document indexAndGetDocument(String indexDir,
-            Resource resource) {
-        Document luceneDoc = luceneActions
-                .populateLuceneDoc(parseResourceInternal(resource));
-        try {
-            luceneActions.index(luceneDoc, indexDir, liusConfig);
-        } catch (IOException e) {
-            LiusUtils.doOnException(e);
-        }
-        return luceneDoc;
-    }
-
-    public synchronized Document indexAndGetDocument2(String indexDir,
-            Object bean) {
-        Document luceneDoc = luceneActions
-                .populateLuceneDoc(parseObjectInternal(bean));
-        try {
-            luceneActions.index(luceneDoc, indexDir, liusConfig);
-        } catch (IOException e) {
-            LiusUtils.doOnException(e);
-        }
-        return luceneDoc;
-    }
-
-    public synchronized void index(String indexDir, List LuceneCostumFields,
-            Resource resource) {
-        Document luceneDoc = luceneActions
-                .populateLuceneDoc(parseResourceInternal(resource));
-        for (int i = 0; i < LuceneCostumFields.size(); i++) {
-            luceneDoc.add((Field) LuceneCostumFields.get(i));
-        }
-        try {
-            luceneActions.index(luceneDoc, indexDir, liusConfig);
-        } catch (IOException e) {
-            LiusUtils.doOnException(e);
-        }
-    }
-
-    public synchronized void indexWithCostumLiusFields(String indexDir,
-            List LuceneCostumFields, Resource resource) {
-        Document luceneDoc = luceneActions
-                .populateLuceneDoc(parseResourceInternal(resource));
-        for (int i = 0; i < LuceneCostumFields.size(); i++) {
-            LiusField lf = (LiusField) LuceneCostumFields.get(i);
-            Field field = null;
-            if (lf.getType().equalsIgnoreCase("text")) {
-                field = new Field(lf.getName(), lf.getValue(), Field.Store.YES,
-                        Field.Index.TOKENIZED);
-            } else if (lf.getType().equalsIgnoreCase("keyword")) {
-                field = new Field(lf.getName(), lf.getValue(), Field.Store.YES,
-                        Field.Index.UN_TOKENIZED);
-            } else if (lf.getType().equalsIgnoreCase("unindexed")) {
-                field = new Field(lf.getName(), lf.getValue(), Field.Store.YES,
-                        Field.Index.NO);
-            } else if (lf.getType().equalsIgnoreCase("unstored")) {
-                field = new Field(lf.getName(), lf.getValue(), Field.Store.NO,
-                        Field.Index.TOKENIZED);
-            }
-            logger
-                    .info("New field added to document : " + lf.getName()
-                            + " (type = " + lf.getType() + ") " + " : "
-                            + lf.getValue());
-            if (field != null) {
-                luceneDoc.add(field);
-            }
-        }
-        try {
-            luceneActions.index(luceneDoc, indexDir, liusConfig);
-        } catch (IOException e) {
-            LiusUtils.doOnException(e);
-        }
-    }
-
-    public synchronized void indexUsingTransaction(String indexDir,
-            List LuceneCostumFields, Resource resource) {
-        Document luceneDoc = luceneActions
-                .populateLuceneDoc(parseResourceInternal(resource));
-        for (int i = 0; i < LuceneCostumFields.size(); i++) {
-            luceneDoc.add((Field) LuceneCostumFields.get(i));
-        }
-        ramDir = new RAMDirectory();
-        transaction = new LiusTransactionManager(luceneDoc, ramDir, indexDir,
-                liusConfig);
-        try {
-            transaction.start();
-            transaction.commit();
-        } catch (IOException e) {
-            LiusUtils.doOnException(e);
-            transaction.rollBack();
-        }
-    }
+//    public synchronized void indexWithCostumLiusFields(String indexDir,
+//            List LuceneCostumFields, Resource resource) {
+//        Document luceneDoc = luceneActions
+//                .populateLuceneDoc(parseResourceInternal(resource));
+//        for (int i = 0; i < LuceneCostumFields.size(); i++) {
+//            LiusField lf = (LiusField) LuceneCostumFields.get(i);
+//            Field field = null;
+//            if (lf.getType().equalsIgnoreCase("text")) {
+//                field = new Field(lf.getName(), lf.getValue(), Field.Store.YES,
+//                        Field.Index.TOKENIZED);
+//            } else if (lf.getType().equalsIgnoreCase("keyword")) {
+//                field = new Field(lf.getName(), lf.getValue(), Field.Store.YES,
+//                        Field.Index.UN_TOKENIZED);
+//            } else if (lf.getType().equalsIgnoreCase("unindexed")) {
+//                field = new Field(lf.getName(), lf.getValue(), Field.Store.YES,
+//                        Field.Index.NO);
+//            } else if (lf.getType().equalsIgnoreCase("unstored")) {
+//                field = new Field(lf.getName(), lf.getValue(), Field.Store.NO,
+//                        Field.Index.TOKENIZED);
+//            }
+//            logger
+//                    .info("New field added to document : " + lf.getName()
+//                            + " (type = " + lf.getType() + ") " + " : "
+//                            + lf.getValue());
+//            if (field != null) {
+//                luceneDoc.add(field);
+//            }
+//        }
+//        try {
+//            luceneActions.index(luceneDoc, indexDir, liusConfig);
+//        } catch (IOException e) {
+//            LiusUtils.doOnException(e);
+//        }
+//    }
 
     protected LuceneActions getLuceneActions() {
         return luceneActions;
