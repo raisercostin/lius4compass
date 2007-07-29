@@ -1,4 +1,6 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>lius</groupId>
 	<artifactId>lius4compass</artifactId>
@@ -23,8 +25,12 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>scm:svn:http://lius4compass.googlecode.com/svn/trunk/</connection>
-		<developerConnection>scm:svn:https://lius4compass.googlecode.com/svn/trunk/</developerConnection>
+		<connection>
+			scm:svn:http://lius4compass.googlecode.com/svn/trunk/
+		</connection>
+		<developerConnection>
+			scm:svn:https://lius4compass.googlecode.com/svn/trunk/
+		</developerConnection>
 		<url>http://lius4compass.googlecode.com/svn/trunk/</url>
 	</scm>
 	<issueManagement>
@@ -52,11 +58,11 @@
 		</site>
 	</distributionManagement>
 	<!-- 
-	<distributionManagement>
+		<distributionManagement>
 		<site></site>
 		<repository></repository>
-	</distributionManagement>
-	 -->
+		</distributionManagement>
+	-->
 	<build>
 		<resources>
 			<resource>
@@ -119,6 +125,14 @@
 				</dependencies>
 				<configuration>
 					<scanIntervalSeconds>10</scanIntervalSeconds>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<descriptors>
+						<descriptor>src/assembly/dist.xml</descriptor>
+					</descriptors>
 				</configuration>
 			</plugin>
 		</plugins>
@@ -284,11 +298,11 @@
 			<artifactId>spring-beans</artifactId>
 			<version>2.0.6</version>
 		</dependency>
-	    <dependency>
-	      <groupId>org.compass</groupId>
-	      <artifactId>compass</artifactId>
-	      <version>1.2M2</version>
-	    </dependency>
+		<dependency>
+			<groupId>org.compass</groupId>
+			<artifactId>compass</artifactId>
+			<version>1.2M2</version>
+		</dependency>
 	</dependencies>
 	<reporting>
 		<plugins>
