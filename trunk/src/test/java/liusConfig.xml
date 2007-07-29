@@ -309,6 +309,7 @@
 	</search>
 	<searchResult>
 		<fieldsToDisplay setHighlighter="true">				
+            <luceneField name="score" label="score" />
 			<luceneField name="title" label="title"/>
 			<luceneField name="subject" label="subject"/>
 			<luceneField name="creator" label="creator"/>	
