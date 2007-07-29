@@ -16,8 +16,11 @@
  */
 package lius.index;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 import lius.config.LiusConfig;
@@ -25,9 +28,11 @@ import lius.config.LiusField;
 import lius.index.util.LiusUtils;
 import lius.lucene.LuceneActions;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.log4j.Logger;
 import org.apache.lucene.document.Document;
 import org.apache.lucene.document.Field;
+import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 
 /**
@@ -43,6 +48,12 @@ public abstract class BaseIndexer implements Indexer, IndexService {
     public BaseIndexer() {
     }
 
+    public abstract int getType();
+
+    public abstract Collection getConfigurationFields(LiusConfig liusConfig);
+
+    public abstract boolean isConfigured(LiusConfig liusConfig);
+
     public void setLuceneActions(LuceneActions luceneActions) {
         this.luceneActions = luceneActions;
     }
@@ -50,20 +61,31 @@ public abstract class BaseIndexer implements Indexer, IndexService {
     public void setUp(LiusConfig lc) {
         this.liusConfig = lc;
     }
-//
-//    private void index(String indexDir, Resource resource) {
-//        indexAndGetDocument(indexDir, resource);
-//    }
-//    
-//    private void indexBean(String indexDir, Object object)
-//    {
-//        indexAndGetDocument2(indexDir, object);
-//    }
+
+    public List<Document> getDocuments(Resource resource,
+            boolean oneDocumentForAllSubResources) {
+        if (oneDocumentForAllSubResources) {
+            List<Document> result = new ArrayList<Document>();
+            Document luceneDoc = getDocument(resource);
+            result.add(luceneDoc);
+            return result;
+        } else {
+            try {
+                List<Document> result = new ArrayList<Document>();
+                for (Iterator iterator = FileUtils.iterateFiles(resource
+                        .getFile(), null, true); iterator.hasNext();) {
+                    File file = (File) iterator.next();
+                    result.add(getDocument(new FileSystemResource(file)));
+                }
+                return result;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     public Document getDocument(Resource resource) {
-        Document luceneDoc = luceneActions
-                .populateLuceneDoc(parseResourceInternal(resource));
-        return luceneDoc;
+        return luceneActions.populateLuceneDoc(parseResourceInternal(resource));
     }
 
     public ParsingResult getLiusDocument(Resource resource) {
@@ -75,89 +97,10 @@ public abstract class BaseIndexer implements Indexer, IndexService {
                 .populateLuceneDoc(parseObjectInternal(object));
         return luceneDoc;
     }
-//
-//    public synchronized Document indexAndGetDocument(String indexDir,
-//            Resource resource) {
-//        Document luceneDoc = luceneActions
-//                .populateLuceneDoc(parseResourceInternal(resource));
-//        try {
-//            luceneActions.index(luceneDoc, indexDir, liusConfig);
-//        } catch (IOException e) {
-//            LiusUtils.doOnException(e);
-//        }
-//        return luceneDoc;
-//    }
-//
-//    public synchronized Document indexAndGetDocument2(String indexDir,
-//            Object bean) {
-//        Document luceneDoc = luceneActions
-//                .populateLuceneDoc(parseObjectInternal(bean));
-//        try {
-//            luceneActions.index(luceneDoc, indexDir, liusConfig);
-//        } catch (IOException e) {
-//            LiusUtils.doOnException(e);
-//        }
-//        return luceneDoc;
-//    }
-//
-//    public synchronized void index(String indexDir, List LuceneCostumFields,
-//            Resource resource) {
-//        Document luceneDoc = luceneActions
-//                .populateLuceneDoc(parseResourceInternal(resource));
-//        for (int i = 0; i < LuceneCostumFields.size(); i++) {
-//            luceneDoc.add((Field) LuceneCostumFields.get(i));
-//        }
-//        try {
-//            luceneActions.index(luceneDoc, indexDir, liusConfig);
-//        } catch (IOException e) {
-//            LiusUtils.doOnException(e);
-//        }
-//    }
-
-//    public synchronized void indexWithCostumLiusFields(String indexDir,
-//            List LuceneCostumFields, Resource resource) {
-//        Document luceneDoc = luceneActions
-//                .populateLuceneDoc(parseResourceInternal(resource));
-//        for (int i = 0; i < LuceneCostumFields.size(); i++) {
-//            LiusField lf = (LiusField) LuceneCostumFields.get(i);
-//            Field field = null;
-//            if (lf.getType().equalsIgnoreCase("text")) {
-//                field = new Field(lf.getName(), lf.getValue(), Field.Store.YES,
-//                        Field.Index.TOKENIZED);
-//            } else if (lf.getType().equalsIgnoreCase("keyword")) {
-//                field = new Field(lf.getName(), lf.getValue(), Field.Store.YES,
-//                        Field.Index.UN_TOKENIZED);
-//            } else if (lf.getType().equalsIgnoreCase("unindexed")) {
-//                field = new Field(lf.getName(), lf.getValue(), Field.Store.YES,
-//                        Field.Index.NO);
-//            } else if (lf.getType().equalsIgnoreCase("unstored")) {
-//                field = new Field(lf.getName(), lf.getValue(), Field.Store.NO,
-//                        Field.Index.TOKENIZED);
-//            }
-//            logger
-//                    .info("New field added to document : " + lf.getName()
-//                            + " (type = " + lf.getType() + ") " + " : "
-//                            + lf.getValue());
-//            if (field != null) {
-//                luceneDoc.add(field);
-//            }
-//        }
-//        try {
-//            luceneActions.index(luceneDoc, indexDir, liusConfig);
-//        } catch (IOException e) {
-//            LiusUtils.doOnException(e);
-//        }
-//    }
 
     protected LuceneActions getLuceneActions() {
         return luceneActions;
     }
-
-    public abstract int getType();
-
-    public abstract Collection getConfigurationFields(LiusConfig liusConfig);
-
-    public abstract boolean isConfigured(LiusConfig liusConfig);
 
     public ParsingResult parseResource(LiusConfig liusConfig, Resource resource) {
         throw new IllegalStateException();

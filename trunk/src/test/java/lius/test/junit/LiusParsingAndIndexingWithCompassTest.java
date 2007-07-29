@@ -16,6 +16,8 @@ package lius.test.junit;
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+import java.util.List;
+
 import junit.framework.TestCase;
 import lius.index.DefaultParsingService;
 import lius.index.ParsingService;
@@ -74,15 +76,14 @@ public class LiusParsingAndIndexingWithCompassTest extends TestCase {
 
     public void testRetrieveLuceneDocument() throws Exception {
         populate();
-        CompassDetachedHits hits = compassTemplate
-                .findWithDetach("institutionnel");
-        assertEquals(1, hits.getLength());
-        assertEquals(0.0191, hits.getHits()[0].getScore(), 1e-3);
+        CompassDetachedHits hits = compassTemplate.findWithDetach("test");
+        assertEquals(14, hits.getLength());
+        assertEquals(0.576, hits.getHits()[0].getScore(), 1e-3);
         hits = compassTemplate.findWithDetach("fullPath:institutionnel");
         assertEquals(0, hits.getLength());
         hits = compassTemplate.findWithDetach("content:institutionnel");
-        assertEquals(1, hits.getLength());
-        assertEquals(0.0203, hits.getHits()[0].getScore(), 1e-3);
+        assertEquals(2, hits.getLength());
+        assertEquals(0.168, hits.getHits()[0].getScore(), 1e-3);
         hits = compassTemplate.findWithDetach("unknown:institutionnel");
         assertEquals(0, hits.getLength());
     }
@@ -264,10 +265,12 @@ public class LiusParsingAndIndexingWithCompassTest extends TestCase {
         InternalCompassSession session = (InternalCompassSession) compass
                 .openSession();
         CompassTransaction tx = session.beginTransaction();
-        LuceneResource luceneResource = parsingService.parseLuceneResource(
-                "fileAlias", new ClassPathResource("testFiles/testPDF.pdf"),
-                session);
-        session.save(luceneResource);
+        List<LuceneResource> luceneResources = parsingService
+                .parseLuceneResources("fileAlias", new ClassPathResource(
+                        "testFiles"), session, false);
+        for (LuceneResource luceneResource : luceneResources) {
+            session.save(luceneResource);
+        }
         tx.commit();
         session.close();
     }

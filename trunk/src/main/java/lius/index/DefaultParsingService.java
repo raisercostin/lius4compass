@@ -1,5 +1,8 @@
 package lius.index;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import lius.config.LiusConfig;
 import lius.config.LiusConfigBuilder;
 
@@ -23,6 +26,12 @@ public class DefaultParsingService implements ParsingService {
         return indexer.getDocument(resource);
     }
 
+    public List<Document> parse(Resource resource,
+            boolean oneDocumentForAllSubResources) {
+        IndexService indexer = IndexerFactory.getIndexer(resource, lc);
+        return indexer.getDocuments(resource, oneDocumentForAllSubResources);
+    }
+
     public Document parse(Object bean) {
         IndexService indexer = IndexerFactory.getIndexer(bean, lc);
         return indexer.getDocumentFromObject(bean);
@@ -30,7 +39,22 @@ public class DefaultParsingService implements ParsingService {
 
     public LuceneResource parseLuceneResource(String alias, Resource resource,
             CompassSession compassSession) {
-        return new LuceneResource(alias, parse(resource), -1,
+        return createLuceneResource(alias, compassSession, parse(resource));
+    }
+
+    public List<LuceneResource> parseLuceneResources(String alias,
+            Resource resource, CompassSession compassSession,
+            boolean oneDocumentForAllSubResources) {
+        List<LuceneResource> result = new ArrayList<LuceneResource>();
+        for (Document document : parse(resource, oneDocumentForAllSubResources)) {
+            result.add(createLuceneResource(alias, compassSession, document));
+        }
+        return result;
+    }
+
+    private LuceneResource createLuceneResource(String alias,
+            CompassSession compassSession, Document luceneDocument) {
+        return new LuceneResource(alias, luceneDocument, -1,
                 (LuceneSearchEngine) ((InternalCompassSession) compassSession)
                         .getSearchEngine());
     }
