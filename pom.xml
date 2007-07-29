@@ -1,11 +1,9 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>lius</groupId>
 	<artifactId>lius4compass</artifactId>
 	<name>lius4compass</name>
-	<version>1.0.3-SNAPSHOT</version>
+	<version>1.0.3</version>
 	<description>lius4compass</description>
 	<url>http://www.bibl.ulaval.ca/lius/index.en.html</url>
 	<inceptionYear>2004</inceptionYear>
@@ -25,13 +23,9 @@
 		</license>
 	</licenses>
 	<scm>
-		<connection>
-			scm:svn:http://lius4compass.googlecode.com/svn/trunk/
-		</connection>
-		<developerConnection>
-			scm:svn:https://lius4compass.googlecode.com/svn/trunk/
-		</developerConnection>
-		<url>http://lius4compass.googlecode.com/svn/trunk/</url>
+		<connection>scm:svn:http://lius4compass.googlecode.com/svn/tags/lius4compass-1.0.3</connection>
+		<developerConnection>scm:svn:https://lius4compass.googlecode.com/svn/tags/lius4compass-1.0.3</developerConnection>
+		<url>http://lius4compass.googlecode.com/svn/tags/lius4compass-1.0.3</url>
 	</scm>
 	<issueManagement>
 		<system>GoogleCode</system>
