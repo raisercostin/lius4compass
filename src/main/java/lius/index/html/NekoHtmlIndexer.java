@@ -31,7 +31,6 @@ import java.util.Collection;
 import lius.config.LiusConfig;
 import lius.index.BaseIndexer;
 import lius.index.ParsingResult;
-import lius.index.util.LiusUtils;
 import lius.index.xml.XmlFileIndexer;
 
 import org.apache.commons.io.FileUtils;
