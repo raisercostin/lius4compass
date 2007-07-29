@@ -186,7 +186,8 @@ public class LiusParsingTest extends TestCase {
         assertNotNull(document.get("content"));
         String[] values = document.getValues("content");
         assertEquals(1, values.length);
-        assertTrue(document.get("content").contains("Archimède et Lius  Rida Benjelloun  Java  XML  XSLT  JDOM  I"));
+        assertTrue(document.get("content").contains(
+                "Archimède et Lius  Rida Benjelloun  Java  XML  XSLT  JDOM  I"));
         assertEquals(7389, document.get("content").length());
         assertNotNull(document.get("fullPath"));
     }
@@ -226,12 +227,13 @@ public class LiusParsingTest extends TestCase {
         personne.setNom("Benjelloun");
         personne.setPrenom("Rida");
         personne.setAdresse("Quebec Canada");
+        personne.setId("aha");
         Document document = parsingService.parse(personne);
         assertNotNull(document);
         assertNull(document.get("fullPath"));
         assertNotNull(document.get("content"));
-        assertEquals("Benjelloun Rida Quebec Canada ", document.get("content")
-                .substring(0, 30));
-        assertEquals(30, document.get("content").length());
+        assertEquals("aha Benjelloun Rida Quebec Canada ", document.get(
+                "content").substring(0, 34));
+        assertEquals(34, document.get("content").length());
     }
 }

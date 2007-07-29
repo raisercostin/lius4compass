@@ -20,4 +20,7 @@ public interface ParsingService {
 
     LuceneResource parseLuceneResource(String alias,
             Resource classPathResource, CompassSession compassSession);
+
+    LuceneResource parseLuceneResource(String alias, Object object,
+            CompassSession compassSession);
 }
