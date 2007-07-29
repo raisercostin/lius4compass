@@ -37,6 +37,11 @@ public class DefaultParsingService implements ParsingService {
         return indexer.getDocumentFromObject(bean);
     }
 
+    public LuceneResource parseLuceneResource(String alias, Object object,
+            CompassSession compassSession) {
+        return createLuceneResource(alias, compassSession, parse(object));
+    }
+
     public LuceneResource parseLuceneResource(String alias, Resource resource,
             CompassSession compassSession) {
         return createLuceneResource(alias, compassSession, parse(resource));
