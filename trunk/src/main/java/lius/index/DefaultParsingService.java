@@ -33,7 +33,7 @@ public class DefaultParsingService implements ParsingService {
     }
 
     public Document parse(Object bean) {
-        IndexService indexer = IndexerFactory.getIndexer(bean, lc);
+        IndexService indexer = IndexerFactory.getIndexer(lc);
         return indexer.getDocumentFromObject(bean);
     }
 

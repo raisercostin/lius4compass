@@ -36,10 +36,6 @@ import java.util.Date;
 public abstract class LiusProxyField extends LiusField {
     private LiusField lf;
 
-    // Proxy Fields should not be constructed directly
-    private LiusProxyField() {
-    }
-
     public LiusProxyField(LiusField realField) {
         if (realField == null)
             throw new IllegalArgumentException(

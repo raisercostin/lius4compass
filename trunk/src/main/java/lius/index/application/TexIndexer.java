@@ -46,14 +46,17 @@ import org.springframework.core.io.Resource;
 public class TexIndexer extends BaseIndexer implements Indexer {
     public static Logger logger = Logger.getLogger(TexIndexer.class);
 
+    @Override
     public int getType() {
         return 1;
     }
 
+    @Override
     public boolean isConfigured(LiusConfig liusConfig) {
         return liusConfig.getTexFields() != null;
     }
 
+    @Override
     public Collection getConfigurationFields(LiusConfig liusConfig) {
         return liusConfig.getTexFields();
     }
@@ -62,6 +65,7 @@ public class TexIndexer extends BaseIndexer implements Indexer {
      * @see lius.index.BaseIndexer#getPopulatedCollection(java.lang.Object,
      *      java.util.Collection)
      */
+    @Override
     public ParsingResult parseResource(LiusConfig liusConfig,
             Resource resource) {
         try {

@@ -23,7 +23,6 @@ import lius.index.DefaultParsingService;
 import lius.index.ParsingService;
 import lius.test.beans.Personne;
 
-import org.apache.lucene.document.Document;
 import org.compass.core.Compass;
 import org.compass.core.CompassDetachedHits;
 import org.compass.core.CompassTemplate;
@@ -58,6 +57,7 @@ public class LiusParsingAndIndexingWithCompassTest extends TestCase {
                 "liusConfig.xml"));
     }
 
+    @Override
     protected void tearDown() throws Exception {
         compass.close();
         super.tearDown();
