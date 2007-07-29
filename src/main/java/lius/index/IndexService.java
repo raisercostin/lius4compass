@@ -1,5 +1,7 @@
 package lius.index;
 
+import java.util.List;
+
 import lius.config.LiusConfig;
 
 import org.apache.lucene.document.Document;
@@ -15,8 +17,11 @@ public interface IndexService extends Indexer {
      * Gets the lucene document from resource.
      * 
      * @param resource
+     * @param mixedIndexing TODO
      * @return
      */
+    List<Document> getDocuments(Resource resource, boolean mixedIndexing);
+
     Document getDocument(Resource resource);
 
     ParsingResult getLiusDocument(Resource resource);
