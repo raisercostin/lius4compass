@@ -45,7 +45,7 @@ public class LiusParsingMultithreadingTest extends TestCase {
         for (int i = 0; i < threads.length; i++) {
             threads[i].run();
         }
-        assertDurationSmallerThan("oneThreadMixed", 2000, start, 30);
+        assertDurationSmallerThan("oneThreadMixed", 2000, start, 100);
     }
 
     public void testOnMultipleThreads() throws InterruptedException {
@@ -67,7 +67,7 @@ public class LiusParsingMultithreadingTest extends TestCase {
         for (int i = 0; i < threads.length; i++) {
             threads[i].join();
         }
-        assertDurationSmallerThan("multipleThreadsMixed", 5000, start, 30);
+        assertDurationSmallerThan("multipleThreadsMixed", 5000, start, 100);
     }
 
     public void testOnOneThreadsWord() throws InterruptedException {
@@ -87,7 +87,7 @@ public class LiusParsingMultithreadingTest extends TestCase {
         for (int i = 0; i < threads.length; i++) {
             threads[i].run();
         }
-        assertDurationSmallerThan("oneThreadWord", 200, start, 30);
+        assertDurationSmallerThan("oneThreadWord", 200, start, 100);
     }
 
     public void testOnMultipleThreadsWord() throws InterruptedException {
@@ -110,7 +110,7 @@ public class LiusParsingMultithreadingTest extends TestCase {
         for (int i = 0; i < threads.length; i++) {
             threads[i].join();
         }
-        assertDurationSmallerThan("multipleThreadsWord", 100, start, 30);
+        assertDurationSmallerThan("multipleThreadsWord", 100, start, 100);
     }
 
     private void assertDurationSmallerThan(String message,
