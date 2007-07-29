@@ -228,7 +228,7 @@ public class LuceneActions {
             }
             ir.close();
         } catch (IOException e) {
-            LiusUtils.doOnException(e);
+            throw new RuntimeException(e);
         }
         return documentsList;
     }

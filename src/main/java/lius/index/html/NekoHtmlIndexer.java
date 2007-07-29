@@ -120,11 +120,11 @@ public class NekoHtmlIndexer extends BaseIndexer {
             org.w3c.dom.Document domDoc = parser.getDocument();
             jdomDoc = convert(domDoc);
         } catch (SAXException e) {
-            LiusUtils.doOnException(e);
+            throw new RuntimeException(e);
         } catch (IOException e) {
-            LiusUtils.doOnException(e);
+            throw new RuntimeException(e);
         } catch (Exception e) {
-            LiusUtils.doOnException(e);
+            throw new RuntimeException(e);
         } finally {
             try {
                 try {
@@ -137,7 +137,7 @@ public class NekoHtmlIndexer extends BaseIndexer {
                     }
                 }
             } catch (IOException ioe) {
-                LiusUtils.doOnException(ioe);
+                throw new RuntimeException(ioe);
             }
         }
         return jdomDoc;
