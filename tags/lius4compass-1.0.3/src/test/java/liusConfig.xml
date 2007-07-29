@@ -1,0 +1,319 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<luceneIndex>
+<!-- org.apache.lucene.analysis.StopAnalyzer -->
+<!-- org.apache.lucene.analysis.SimpleAnalyzer-->
+<!-- org.apache.lucene.analysis.standard.StandardAnalyzer-->
+<!-- org.apache.lucene.analysis.WhitespaceAnalyzer-->
+<!-- org.apache.lucene.analysis.fr.FrenchAnalyzer-->
+<!-- org.apache.lucene.analysis.cjk.CJKAnalyzer-->
+<!-- org.apache.lucene.analysis.cn.ChineseAnalyzer-->
+<!-- org.apache.lucene.analysis.cz.CzechAnalyzer-->
+<!-- org.apache.lucene.analysis.ru.RussianAnalyzer-->
+<!-- org.apache.lucene.analysis.lius.unicode.UTF8AccentRemoverAnalyzer-->
+		
+	<properties>
+		<analyzer class="org.apache.lucene.analysis.lius.unicode.UTF8AccentRemoverAnalyzer"/>
+		<createIndex value="auto"/>
+		<indexWriterProperty mergeFactor="10" maxMergeDocs="100" optimize="true"/>
+	</properties>
+														
+	<index>
+		<xml>
+			<xmlFile ns="http://purl.org/dc/elements/1.1/" setBoost="2.0">
+				<indexer class="lius.index.xml.XmlFileIndexer">
+					<mime>text/xml</mime>					
+				</indexer>
+				<fields>
+					<luceneField name="title" xpathSelect="//dc:title" type="Text" setBoost="0.1"/>
+					<luceneField name="subject" xpathSelect="//dc:subject" type="Keyword" setBoost="2.0"/>
+					<luceneField name="creator" xpathSelect="//dc:creator" type="Text"/>
+					<luceneField name="description" xpathSelect="//dc:description" type="Text"/>
+					<luceneField name="publisher" xpathSelect="//dc:publisher" type="Text"/>
+					<luceneField name="contributor" xpathSelect="//dc:contributor" type="Text"/>					
+					<luceneField name="type" xpathSelect="//dc:type" type="Text"/>
+					<luceneField name="format" xpathSelect="//dc:format" type="Text"/>
+					<luceneField name="identifier" xpathSelect="//dc:identifier" type="Text"/>
+					<luceneField name="language" xpathSelect="//dc:language" type="Text"/>
+					<luceneField name="rights" xpathSelect="//dc:rights" type="Text"/>
+				</fields>
+			</xmlFile>
+			<xmlFile ns="http://www.ndltd.org/standards/metadata/etdms/1.0/">
+				<indexer class="lius.index.xml.XmlFileIndexer">
+					<mime>text/xml</mime>					
+				</indexer>
+				<fields>
+					<luceneField name="title" xpathSelect="//etdms:title" type="Text"/>
+					<luceneField name="subject" xpathSelect="//etdms:subject" type="Keyword"/>
+					<luceneField name="creator" xpathSelect="//etdms:creator" type="Text"/>
+					<luceneField name="description" xpathSelect="//etdms:description" type="Text"/>
+				</fields>	
+			</xmlFile>
+			<xmlFile ns="default" setBoost="0.5">
+				<indexer class="lius.index.xml.XmlFileIndexer">
+					<mime>text/xml</mime>					
+				</indexer>
+				<fields>
+					<luceneField name="fullText" xpathSelect="//*" type="Text" ocurSep="|"/>
+				</fields>	
+			</xmlFile>
+			<xmlNodes>				
+				<node select="//book">
+					<luceneField name="title" xpathSelect="title/@t" type="Text" />
+					<luceneField name="creator" xpathSelect="creator" type="Text" />
+				</node>				
+			</xmlNodes>
+		</xml>
+		<mixedIndexing>
+			<fields>
+				<luceneField fileMimeType="text/plain"/>
+				<luceneField fileMimeType="text/html"/>
+				<luceneField fileMimeType="text/xml"/>
+				<luceneField fileMimeType="application/pdf"/>
+				<luceneField fileMimeType="application/vnd.ms-excel"/>
+				<luceneField fileMimeType="application/msword"/>
+				<luceneField fileMimeType="application/vnd.ms-powerpoint"/>
+				<luceneField fileMimeType="application/rtf"/>
+				<luceneField fileMimeType="text/plain"/>
+				<luceneField fileMimeType="application/vnd.sun.xml.writer"/>
+				<luceneField fileMimeType="application/vnd.oasis.opendocument.text"/>
+				<luceneField fileMimeType="application/zip"/>
+			</fields>
+		</mixedIndexing>		
+		<msWord setBoost="1.2">
+		 	<indexer class="lius.index.msword.WordIndexer">
+				<mime>application/msword</mime>				
+			</indexer>
+			<fields>	
+				<luceneField name="fullText" get="content" type="Text"/>
+			</fields>	
+		</msWord>
+		<msExcel setBoost="1.3">
+			<indexer class="lius.index.excel.ExcelIndexer">
+				<mime>application/vnd.ms-excel</mime>				
+			</indexer>
+			<fields>	
+				<luceneField name="fullText" get="content" type="Text"/>
+			</fields>	
+		</msExcel>
+		<msPowerPoint setBoost="0.2">
+			<indexer class="lius.index.powerpoint.PPTIndexer">
+				<mime>application/vnd.ms-powerpoint</mime>				
+			</indexer>
+			<fields>				
+				<luceneField name="fullText" get="content" type="Text"/>
+			</fields>				
+		</msPowerPoint>
+		<html setBoost="1.4">
+			<indexer class="lius.index.html.JTidyHtmlIndexer">
+				<mime>text/html</mime>				
+				<mime>application/x-asp</mime>					
+			</indexer>
+			<fields>	
+				<luceneField name="fullText" get="content" type="Text"/>
+			</fields>	
+			<!--
+			<indexer class="lius.index.html.NekoHtmlIndexer">
+				<mime>text/html</mime>				
+			</indexer>
+			<fields>
+				<luceneField name="fullText" xpathSelect="//*" type="Text" ocurSep="|" /> 
+  			</fields>
+			-->
+		</html>
+		<rtf setBoost="1.5">
+			<indexer class="lius.index.rtf.RTFIndexer">
+				<mime>application/rtf</mime>				
+			</indexer>
+			<fields>	
+				<luceneField name="fullText" get="content" type="Text"/>
+			</fields>				
+		</rtf>
+		<pdf setBoost="1.6">
+			<indexer class="lius.index.pdf.PdfIndexer">
+				<mime>application/pdf</mime>
+			</indexer>
+			<fields>
+				<luceneField name="fullText" get="content" type="Text"/>
+				<!--<luceneField name="title" get="title" type="Text" />
+				<luceneField name="author" get="author" type="Text" />
+				<luceneField name="creator" get="creator" type="Text" />
+				<luceneField name="summary" get="summary" type="Text" />
+				<luceneField name="keywords" get="keywords" type="Text" />
+				<luceneField name="producer" get="producer" type="Text" />
+				<luceneField name="subject" get="subject" type="Text" />
+				<luceneField name="trapped" get="trapped" type="Text" />
+				<luceneField name="creationDate" get="creationDate" type="DateToString" />
+				<luceneField name="modificationDate" get="modificationDate" type="DateToString" />-->
+			</fields>
+		</pdf>
+		<txt setBoost="0.1">
+			<indexer class="lius.index.txt.TXTIndexer">
+				<mime>text/plain</mime>			
+			</indexer>
+			<fields>
+				<luceneField name="fullText" get="content" type="Text"/>
+			</fields>	
+		</txt>
+		<openOffice setBoost="1.6">
+			<indexer class="lius.index.openoffice.OOIndexer">
+				<mime>application/vnd.sun.xml.writer</mime>				
+			</indexer>
+			<indexer class="lius.index.openoffice.OOIndexer2">
+				<mime>application/vnd.oasis.opendocument.text</mime>				
+			</indexer>
+			<fields>
+				<!--<luceneField name="title" xpathSelect="//dc:title" type="Text" />
+				<luceneField name="subject" xpathSelect="//dc:subject" type="Keyword"/>
+				<luceneField name="keyword" xpathSelect="//meta:keyword" type="Keyword"/>
+				<luceneField name="creator" xpathSelect="//dc:creator" type="Text" />
+				<luceneField name="description" xpathSelect="//dc:description" type="Text" />
+				<luceneField name="date" xpathSelect="//dc:date" type="StringToDate" dateFormat="yyyy-mm-dd"/>
+				<luceneField name="language" xpathSelect="//dc:language" type="Text" />
+				<luceneField name="nbTab" xpathSelect="//meta:document-statistic/@meta:table-count" type="Text" />
+				<luceneField name="nbObject" xpathSelect="//meta:document-statistic/@meta:object-count" type="Text" />
+				<luceneField name="nbImg" xpathSelect="//meta:document-statistic/@meta:image-count" type="Text" />
+				<luceneField name="nbPage" xpathSelect="//meta:document-statistic/@meta:page-count" type="Text" />
+				<luceneField name="nbPara" xpathSelect="//meta:document-statistic/@meta:paragraph-count" type="Text" />
+				<luceneField name="nbWord" xpathSelect="//meta:document-statistic/@meta:word-count" type="Text" />
+				<luceneField name="nbcharacter" xpathSelect="//meta:document-statistic/@meta:character-count" type="Text" />-->
+				<luceneField name="fullText" xpathSelect="//office:body//*" type="Text" ocurSep=" "/>
+			</fields>			
+		</openOffice>
+		<zip>
+			<indexer class="lius.index.zip.ZIPIndexer">
+				<mime>application/zip</mime>				
+			</indexer>
+			<fields>
+				<!--Mimetypes to index in a zip file -->
+				<luceneField fileMimeType="text/plain"/>
+				<luceneField fileMimeType="text/html"/>
+				<luceneField fileMimeType="text/xml"/>
+				<luceneField fileMimeType="application/pdf"/>
+				<luceneField fileMimeType="application/vnd.ms-excel"/>
+				<luceneField fileMimeType="application/msword"/>
+				<luceneField fileMimeType="application/vnd.ms-powerpoint"/>
+				<luceneField fileMimeType="application/rtf"/>
+				<luceneField fileMimeType="text/plain"/>
+				<luceneField fileMimeType="application/vnd.sun.xml.writer"/>
+				<luceneField fileMimeType="application/vnd.oasis.opendocument.text"/>	
+			</fields>
+		</zip> 
+		<tex>
+			<indexer class="lius.index.application.TexIndexer">
+				<mime>application/x-tex</mime>				
+			</indexer>
+			<fields>
+				<luceneField name="documentclass" get="documentclass" type="Text"/>
+				<luceneField name="title" get="title" type="Text"/>
+				<luceneField name="author" get="author" type="Text"/>
+				<luceneField name="content" get="content" type="Text"/>
+				<luceneField name="abstract" get="abstract" type="Text"/>
+				
+			</fields>	
+		</tex>
+		<vcard>
+			<indexer class="lius.index.application.VCardIndexer">
+				<mime>text/x-vcard</mime>				
+			</indexer>
+			<fields>
+				<luceneField name="name" get="name" type="Text"/>
+				<luceneField name="title" get="title" type="Text"/>
+				<luceneField name="nickname" get="nickname" type="Text"/>
+				<luceneField name="birthday" get="birthday" type="Text"/>
+				<luceneField name="notes" get="notes" type="Text"/>
+				<luceneField name="email" get="email" type="Text"/>
+				<luceneField name="phone" get="phone" type="Text"/>
+				<luceneField name="homephone" get="homephone" type="Text"/>
+				<luceneField name="workphone" get="workphone" type="Text"/>
+				<luceneField name="cellphone" get="cellphone" type="Text"/>
+				<luceneField name="categories" get="categories" type="Text"/>
+				<luceneField name="address" get="address" type="Text"/>
+				<luceneField name="homeaddress" get="homeaddress" type="Text"/>
+				<luceneField name="workaddress" get="workaddress" type="Text"/>
+				<luceneField name="url" get="url" type="Text"/>				
+				<luceneField name="organization" get="organization" type="Text"/>				
+			</fields>	
+		</vcard>
+		<mp3>
+			<indexer class="lius.index.audio.MP3Indexer">
+				<mime>audio/mpeg</mime>				
+			</indexer>
+			<fields>
+				<luceneField name="channels" get="channels" type="Text"/>
+				<luceneField name="channelsmode" get="channelsmode" type="Text"/>
+				<luceneField name="version" get="version" type="Text"/>
+				<luceneField name="samplingrate" get="samplingrate" type="Text"/>
+				<luceneField name="layer" get="layer" type="Text"/>
+				<luceneField name="emphasis" get="emphasis" type="Text"/>
+				<luceneField name="nominalbitrate" get="nominalbitrate" type="Text"/>
+				<luceneField name="duration" get="duration" type="Text"/>
+				<luceneField name="location" get="location" type="Text"/>
+				<luceneField name="size" get="size" type="Text"/>
+				<luceneField name="copyright" get="copyright" type="Text"/>
+				<luceneField name="crc" get="crc" type="Text"/>
+				<luceneField name="original" get="original" type="Text"/>
+				<luceneField name="vbr" get="vbr" type="Text"/>
+				<luceneField name="track" get="track" type="Text"/>
+				<luceneField name="year" get="year" type="Text"/>
+				<luceneField name="genre" get="genre" type="Text"/>
+				<luceneField name="title" get="title" type="Text"/>
+				<luceneField name="artist" get="artist" type="Text"/>
+				<luceneField name="album" get="album" type="Text"/>
+				<luceneField name="comments" get="comments" type="Text"/>
+			</fields>	
+		</mp3>
+		<JavaBeans>			
+			<Bean class="lius.test.beans.Book">
+				<luceneField name="titre" getMethod="getTitle" type="Text"/>
+				<luceneField name="auteur" getMethod="getCreator" type="Text"/>
+			</Bean>
+			<Bean class="lius.test.beans.Personne" setBoost="2.0">
+				<luceneField name="nom" getMethod="getNom" type="Text"/>
+				<luceneField name="prenom" getMethod="getPrenom" type="Text"/>
+				<luceneField name="adresse" getMethod="getAdresse" type="Text"/>
+			</Bean>
+		</JavaBeans>
+		<jcr>				
+			<node select="">
+<!--				<luceneField name="title" xpathSelect="baseMetaData/@title" type="Text" />-->
+				<luceneField name="date" xpathSelect="@arc:deposit.datestamp" type="Text" />
+				<luceneField name="path" xpathSelect="@jcr:path" type="Keyword" />
+				<luceneField name="jcr-uuid" xpathSelect="@jcr:uuid" type="Keyword" />
+				<luceneField name="content" xpathSelect="element(*, nt:file)" type="Text" />
+			</node>			
+		</jcr>
+		
+	</index>
+	<search>
+		<!--
+ 			org.apache.lucene.search.TermQuery
+ 			org.apache.lucene.search.PrefixQuery
+ 			org.apache.lucene.search.FuzzyQuery
+       	<queryTerm class="org.apache.lucene.search.WildcardQuery">
+               <term field="creator"/>
+       	</queryTerm>
+       	<rangeQuery>
+                   <term field="creator"/>
+                   <booleanInclusive value="true"/>
+      	 </rangeQuery>
+     	  <queryParser>
+    	                   <defaultSearchField value="title"/>
+   	    </queryParser>
+ 		 -->
+ 		 <!--If you want to search the field add it in the element searchFields -->
+
+		<multiFieldQueryParser>
+			<searchFields sep=",">title,subject,creator,description,publisher,contributor,fullText</searchFields>
+		</multiFieldQueryParser>
+	</search>
+	<searchResult>
+		<fieldsToDisplay setHighlighter="true">				
+			<luceneField name="title" label="title"/>
+			<luceneField name="subject" label="subject"/>
+			<luceneField name="creator" label="creator"/>	
+			<luceneField name="fullText" label="full text" setFragmenter="50"/>	
+		</fieldsToDisplay>
+		
+	</searchResult>
+	
+</luceneIndex>
