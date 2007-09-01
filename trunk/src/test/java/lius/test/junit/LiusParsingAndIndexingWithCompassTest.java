@@ -79,17 +79,17 @@ public class LiusParsingAndIndexingWithCompassTest extends TestCase {
         populate();
         CompassDetachedHits hits = compassTemplate.findWithDetach("test");
         assertEquals(14, hits.getLength());
-        assertEquals(0.618, hits.getHits()[0].getScore(), 1e-3);
+        assertEquals(0.618, hits.getHits()[0].getScore(), 1e-1);
         hits = compassTemplate.findWithDetach("fullPath:institutionnel");
         assertEquals(0, hits.getLength());
         hits = compassTemplate.findWithDetach("content:institutionnel");
         assertEquals(2, hits.getLength());
-        assertEquals(0.172, hits.getHits()[0].getScore(), 1e-3);
+        assertEquals(0.172, hits.getHits()[0].getScore(), 1e-2);
         hits = compassTemplate.findWithDetach("unknown:institutionnel");
         assertEquals(0, hits.getLength());
         hits = compassTemplate.findWithDetach("Quebec");
         assertEquals(1, hits.getLength());
-        assertEquals(1.0, hits.getHits()[0].getScore(), 1e-3);
+        assertEquals(1.0, hits.getHits()[0].getScore(), 1e-2);
     }
 
     private void populate() {
