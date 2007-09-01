@@ -1,0 +1,24 @@
+<compass-core-config
+    xmlns="http://www.opensymphony.com/compass/schema/core-config"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.opensymphony.com/compass/schema/core-config
+           http://www.opensymphony.com/compass/schema/compass-core-config.xsd">
+    <compass name="default">
+        <connection>
+            <file path="target/temp/search-index" />
+            <lockFactory type="nativefs" path="test/#subindex#" />
+        </connection>
+        <mappings>
+            <resource
+                location="config/compass-resource-mapping.cpm.xml" />
+            <!-- 
+                <mapping class="org.apache.lucene.document.Document" />
+                <meta-data resource="config/library.cmd.xml" />
+                <mapping class="ro.anyclue.hr.app.index.persist.impl.simple.StringDocument" />
+                <mapping class="org.compass.sample.library.Author" />
+                <mapping class="org.compass.sample.library.Article" />
+                <mapping class="org.compass.sample.library.Book" />
+            -->
+        </mappings>
+    </compass>
+</compass-core-config>
