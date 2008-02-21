@@ -1,0 +1,15 @@
+<!DOCTYPE compass-core-mapping PUBLIC
+    "-//Compass/Compass Core Mapping DTD 1.0//EN"
+    "http://www.opensymphony.com/compass/dtd/compass-core-mapping.dtd">
+<compass-core-mapping>
+    <resource alias="fileAlias">
+    	<resource-id name="fullPath" />
+	    <resource-property name="content" store="yes" index="tokenized" />
+    </resource>
+    <resource alias="beanAlias" >
+    	<resource-id name="id" />
+	    <resource-property name="nom" store="yes" index="tokenized" />
+	    <resource-property name="prenom" store="yes" index="tokenized" />
+	    <resource-property name="adrese" store="yes" index="tokenized" />
+    </resource>
+</compass-core-mapping>
