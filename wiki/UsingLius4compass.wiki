@@ -1,3 +1,4 @@
+#labels Featured
 #A sample of using this API
 You can see a sample piece of code using this API
 
